@@ -4,6 +4,7 @@ import { useResumeStore } from './features/resumes/store/useResumeStore.js';
 import Login from './features/auth/components/Login';
 import ResumeUploader from './features/resumes/components/ResumeUploader';
 import AnalysisDashboard from './features/resumes/components/AnalysisDashboard';
+import Register from './features/auth/components/Register';
 import { Loader2, LogOut, Briefcase } from 'lucide-react';
 
 export default function App() {
@@ -12,9 +13,9 @@ export default function App() {
   const user = useAuthStore((state) => state.user);
   const isAuthLoading = useAuthStore((state) => state.loading);
   const logout = useAuthStore((state) => state.logout);
-
   const resumeAnalysisData = useResumeStore((state) => state.analysisData);
-
+  // Local state to manage the current authentication view (login or register)
+  const [authView, setAuthView] = useState('login'); // 'login' or 'register'
   // Trigger automated backend session verification on mount
   useEffect(() => {
     initializeAuth();
@@ -34,7 +35,11 @@ export default function App() {
 
   // Route unauthorized guests cleanly to the isolated gateway view
   if (!user) {
-    return <Login onSwitchToRegister={() => alert('Registration layout pipeline triggered.')} />;
+    return authView === 'login' ? (
+      <Login onSwitchToRegister={() => setAuthView('register')} />
+    ) : (
+      <Register onSwitchToLogin={() => setAuthView('login')} />
+    );
   }
 
   return (

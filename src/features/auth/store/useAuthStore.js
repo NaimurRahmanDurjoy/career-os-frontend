@@ -8,7 +8,7 @@ import apiClient from '../../../lib/apiClient';
 export const useAuthStore = create((set) => ({
   user: null,
   token: localStorage.getItem('token') || null,
-  loading: true,
+  loading: !!localStorage.getItem('token'),
 
   /**
    * Resolves active user sessions on initial system load or subsequent tab refreshes
@@ -27,7 +27,7 @@ export const useAuthStore = create((set) => ({
       set({ user: userData, token, loading: false });
     } catch (error) {
       console.error('Automated session initialization failed:', error);
-      
+
       // Clean up corrupt or expired storage profiles immediately
       localStorage.removeItem('token');
       delete apiClient.defaults.headers.common['Authorization'];
@@ -42,10 +42,10 @@ export const useAuthStore = create((set) => ({
     set({ loading: true });
     try {
       const { user, access_token } = await authApi.login(email, password);
-      
+
       localStorage.setItem('token', access_token);
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-      
+
       set({ user, token: access_token, loading: false });
       return { success: true };
     } catch (error) {
@@ -66,10 +66,10 @@ export const useAuthStore = create((set) => ({
         password,
         passwordConfirmation
       );
-      
+
       localStorage.setItem('token', access_token);
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-      
+
       set({ user, token: access_token, loading: false });
       return { success: true };
     } catch (error) {
