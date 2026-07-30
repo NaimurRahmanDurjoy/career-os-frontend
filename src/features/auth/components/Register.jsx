@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
 import { registerSchema } from '../validations/authValidation'; // 🎯 স্কিমা ইমপোর্ট করা হলো
 import { Loader2, User, Mail, Lock, AlertCircle } from 'lucide-react';
+import { FcGoogle } from "react-icons/fc";
 
 export default function Register({ onSwitchToLogin }) {
     const register = useAuthStore((state) => state.register);
@@ -17,6 +18,11 @@ export default function Register({ onSwitchToLogin }) {
     const [fieldErrors, setFieldErrors] = useState({});
     const [serverError, setServerError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleSocialLogin = (provider) => {
+        const backendUrl = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
+        window.location.href = `${backendUrl}/auth/${provider}/redirect`;
+    };
 
     // জেনিরিক ইনপুট চেঞ্জার (কোড ক্লিন রাখার জন্য)
     const handleInputChange = (e) => {
@@ -159,6 +165,23 @@ export default function Register({ onSwitchToLogin }) {
                         {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Register'}
                     </button>
                 </form>
+
+                <div className="relative flex py-2 items-center">
+                    <div className="flex-grow border-t border-slate-800"></div>
+                    <span className="flex-shrink mx-4 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                        Or continue with
+                    </span>
+                    <div className="flex-grow border-t border-slate-800"></div>
+                </div>
+
+                <button
+                    onClick={() => handleSocialLogin('google')}
+                    type="button"
+                    className="w-full bg-slate-950 hover:bg-slate-900 border border-slate-800 text-slate-200 font-semibold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-3 text-sm"
+                >
+                    <FcGoogle className="h-5 w-5" />
+                    Google Account
+                </button>
 
                 <p className="text-xs text-center text-slate-400">
                     Already have an account?{' '}

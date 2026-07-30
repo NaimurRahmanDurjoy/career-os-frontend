@@ -3,6 +3,7 @@ import { useAuthStore } from './features/auth/store/useAuthStore.js';
 import { useResumeStore } from './features/resumes/store/useResumeStore.js';
 import Login from './features/auth/components/Login';
 import Register from './features/auth/components/Register';
+import OAuthCallback from './features/auth/components/OAuthCallback';
 import ResumeUploader from './features/resumes/components/ResumeUploader';
 import AnalysisDashboard from './features/resumes/components/AnalysisDashboard';
 import JobsDashboard from './features/jobs/JobsDashboard';
@@ -20,8 +21,15 @@ export default function App() {
   const [authView, setAuthView] = useState('login');
 
   useEffect(() => {
-    initializeAuth();
+    // If not in oauth callback, initialize auth as usual
+    if (!window.location.pathname.startsWith('/oauth/callback')) {
+      initializeAuth();
+    }
   }, [initializeAuth]);
+
+  if (window.location.pathname.startsWith('/oauth/callback')) {
+    return <OAuthCallback onComplete={() => initializeAuth()} />;
+  }
 
   if (isAuthLoading) {
     return (
