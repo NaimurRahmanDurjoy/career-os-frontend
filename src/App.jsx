@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuthStore } from './features/auth/store/useAuthStore.js';
 import { useResumeStore } from './features/resumes/store/useResumeStore.js';
 import Login from './features/auth/components/Login';
+import Register from './features/auth/components/Register';
 import ResumeUploader from './features/resumes/components/ResumeUploader';
 import AnalysisDashboard from './features/resumes/components/AnalysisDashboard';
 import JobsDashboard from './features/jobs/JobsDashboard';
@@ -16,6 +17,7 @@ export default function App() {
 
   // New Navigation State
   const [activeView, setActiveView] = useState('resume');
+  const [authView, setAuthView] = useState('login');
 
   useEffect(() => {
     initializeAuth();
@@ -33,7 +35,10 @@ export default function App() {
   }
 
   if (!user) {
-    return <Login onSwitchToRegister={() => alert('Registration layout pipeline triggered.')} />;
+    if (authView === 'register') {
+      return <Register onSwitchToLogin={() => setAuthView('login')} />;
+    }
+    return <Login onSwitchToRegister={() => setAuthView('register')} />;
   }
 
   return (
