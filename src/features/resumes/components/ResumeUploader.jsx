@@ -61,7 +61,7 @@ export default function ResumeUploader() {
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
       {activeErrorMessage && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl flex items-start gap-3">
+        <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 p-4 rounded-xl flex items-start gap-3">
           <AlertTriangle className="h-5 w-5 flex-shrink-0 mt-0.5" />
           <div className="text-xs font-medium space-y-1">
             <p className="font-bold">Parsing Exception Intercepted</p>
@@ -74,12 +74,16 @@ export default function ResumeUploader() {
         onClick={handleContainerClick}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className={`border-2 border-dashed rounded-2xl p-10 text-center transition-all duration-200 flex flex-col items-center justify-center cursor-pointer min-h-[280px] ${
-          isProcessing
-            ? 'border-blue-500/40 bg-blue-500/5 cursor-not-allowed'
-            : 'border-slate-800 bg-slate-900/50 hover:bg-slate-900 hover:border-slate-700'
-        }`}
+        className={`border-2 border-dashed rounded-3xl p-10 text-center transition-all duration-300 flex flex-col items-center justify-center cursor-pointer min-h-[300px] relative overflow-hidden group ${isProcessing
+          ? 'border-emerald-500/50 bg-emerald-500/10 cursor-not-allowed shadow-[0_0_30px_rgba(16,185,129,0.2)]'
+          : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-900/80 hover:border-emerald-500/50 hover:shadow-[0_0_25px_rgba(16,185,129,0.15)]'
+          }`}
       >
+        {/* Subtle background glow effect on hover */}
+        {!isProcessing && (
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+        )}
+
         <input
           type="file"
           ref={fileInputRef}
@@ -90,25 +94,33 @@ export default function ResumeUploader() {
         />
 
         {isProcessing ? (
-          <div className="space-y-4 animate-pulse">
-            <Loader2 className="h-12 w-12 text-blue-500 animate-spin mx-auto" />
-            <div className="space-y-2">
-              <p className="text-sm font-bold text-white tracking-wide">Executing Llama 3.3 Semantic Extraction...</p>
-              <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                Analyzing structural syntax trees, scoring keyword variations, and auditing document layouts.
+          <div className="space-y-5 animate-pulse relative z-10 w-full">
+            <div className="relative w-16 h-16 mx-auto">
+              <div className="absolute inset-0 border-4 border-emerald-500/30 rounded-full"></div>
+              <div className="absolute inset-0 border-4 border-emerald-400 rounded-full border-t-transparent animate-spin"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-2 h-2 bg-gold-400 rounded-full animate-ping"></div>
+              </div>
+            </div>
+            <div className="space-y-2 text-center">
+              <p className="text-sm font-bold text-slate-200 tracking-widest uppercase">
+                Parsing Document...
+              </p>
+              <p className="text-xs text-indigo-300/60 max-w-xs mx-auto font-medium">
+                Extracting structured data and verifying compliance formatting.
               </p>
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
-            <div className="p-4 bg-slate-950 border border-slate-800 rounded-full w-max mx-auto shadow-inner text-slate-400">
-              <UploadCloud className="h-8 w-8" />
+          <div className="space-y-5 relative z-10">
+            <div className="p-5 bg-white dark:bg-gradient-to-br dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-2xl w-max mx-auto shadow-xl group-hover:scale-105 group-hover:-translate-y-1 transition-all duration-300">
+              <UploadCloud className="h-8 w-8 text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors" />
             </div>
-            <div className="space-y-1">
-              <p className="text-sm font-bold text-slate-200">
-                Drag and drop your document here, or <span className="text-blue-400 hover:underline">browse</span>
+            <div className="space-y-1.5">
+              <p className="text-[15px] font-bold text-slate-700 dark:text-slate-200">
+                Drag and drop your document here, or <span className="text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors">browse files</span>
               </p>
-              <p className="text-xs text-slate-500">Supports industry standard PDF and DOCX formats up to 5MB</p>
+              <p className="text-xs text-slate-500 font-medium">Supports industry standard PDF and DOCX formats up to 5MB</p>
             </div>
           </div>
         )}

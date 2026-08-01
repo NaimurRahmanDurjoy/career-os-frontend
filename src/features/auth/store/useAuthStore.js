@@ -88,6 +88,31 @@ export const useAuthStore = create((set) => ({
   },
 
   /**
+   * Dispatches profile modifications to update personal user information
+   */
+  updateProfile: async (name, email) => {
+    try {
+      const response = await authApi.updateProfile(name, email);
+      set((state) => ({ user: { ...state.user, ...response.user } }));
+      return { success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Initiates password constraint update verification via backend
+   */
+  updatePassword: async (currentPassword, newPassword, newPasswordConfirmation) => {
+    try {
+      await authApi.updatePassword(currentPassword, newPassword, newPasswordConfirmation);
+      return { success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
    * Purges tracking records cleanly on both client memory and server instances
    */
   logout: async () => {

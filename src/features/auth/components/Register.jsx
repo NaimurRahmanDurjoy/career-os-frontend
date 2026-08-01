@@ -78,11 +78,18 @@ export default function Register({ onSwitchToLogin }) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-            <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 space-y-6 shadow-2xl">
-                <div className="space-y-1 text-center">
-                    <h2 className="text-2xl font-black tracking-tight text-white">Create an Account</h2>
-                    <p className="text-xs text-slate-400">Join Career OS and optimize your resume analysis pipeline</p>
+        <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+            {/* Background glow effects strictly for Auth */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <div className="w-full max-w-md bg-slate-900/50 backdrop-blur-2xl border border-slate-700/50 rounded-[2rem] p-10 shadow-2xl shadow-indigo-900/20 space-y-8 relative z-10 my-8">
+                <div className="text-center space-y-2">
+                    <div className="inline-flex items-center justify-center space-x-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-4 py-1.5 mb-4">
+                        <div className="w-2 h-2 rounded-full bg-gold-400 animate-pulse"></div>
+                        <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">Career OS Pro</span>
+                    </div>
+                    <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 tracking-tight">Create Account</h2>
+                    <p className="text-indigo-200/60 text-sm font-medium">Join Career OS and optimize your application pipeline</p>
                 </div>
 
                 {serverError && (
@@ -94,14 +101,14 @@ export default function Register({ onSwitchToLogin }) {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Full Name Field */}
-                    <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Full Name</label>
-                        <div className="relative">
-                            <User className={`absolute left-4 top-3.5 h-5 w-5 ${fieldErrors.name ? 'text-red-400' : 'text-slate-500'}`} />
+                    <div className="space-y-1.5">
+                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest pl-1">Full Name</label>
+                        <div className="relative group">
+                            <User className={`absolute left-4 top-3.5 h-5 w-5 transition-colors ${fieldErrors.name ? 'text-red-400' : 'text-slate-500 group-focus-within:text-indigo-400'}`} />
                             <input
                                 name="name"
                                 type="text"
-                                className={`w-full pl-12 pr-4 py-3 bg-slate-950 border ${fieldErrors.name ? 'border-red-500/50 focus:ring-red-500' : 'border-slate-800 focus:ring-blue-500'} rounded-xl text-sm text-white transition-all outline-none focus:ring-2`}
+                                className={`w-full pl-12 pr-4 py-3.5 bg-slate-950/50 border ${fieldErrors.name ? 'border-red-500/50 focus:ring-red-500' : 'border-slate-700/50 focus:border-indigo-500 focus:ring-indigo-500'} rounded-xl text-sm text-white transition-all outline-none focus:ring-1 shadow-inner shadow-black/20`}
                                 placeholder="John Doe"
                                 value={formData.name}
                                 onChange={handleInputChange}
@@ -111,14 +118,14 @@ export default function Register({ onSwitchToLogin }) {
                     </div>
 
                     {/* Email Address Field */}
-                    <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Email Address</label>
-                        <div className="relative">
-                            <Mail className={`absolute left-4 top-3.5 h-5 w-5 ${fieldErrors.email ? 'text-red-400' : 'text-slate-500'}`} />
+                    <div className="space-y-1.5">
+                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest pl-1">Email Address</label>
+                        <div className="relative group">
+                            <Mail className={`absolute left-4 top-3.5 h-5 w-5 transition-colors ${fieldErrors.email ? 'text-red-400' : 'text-slate-500 group-focus-within:text-indigo-400'}`} />
                             <input
                                 name="email"
                                 type="text"
-                                className={`w-full pl-12 pr-4 py-3 bg-slate-950 border ${fieldErrors.email ? 'border-red-500/50 focus:ring-red-500' : 'border-slate-800 focus:ring-blue-500'} rounded-xl text-sm text-white transition-all outline-none focus:ring-2`}
+                                className={`w-full pl-12 pr-4 py-3.5 bg-slate-950/50 border ${fieldErrors.email ? 'border-red-500/50 focus:ring-red-500' : 'border-slate-700/50 focus:border-indigo-500 focus:ring-indigo-500'} rounded-xl text-sm text-white transition-all outline-none focus:ring-1 shadow-inner shadow-black/20`}
                                 placeholder="name@example.com"
                                 value={formData.email}
                                 onChange={handleInputChange}
@@ -128,14 +135,14 @@ export default function Register({ onSwitchToLogin }) {
                     </div>
 
                     {/* Password Field */}
-                    <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Password</label>
-                        <div className="relative">
-                            <Lock className={`absolute left-4 top-3.5 h-5 w-5 ${fieldErrors.password ? 'text-red-400' : 'text-slate-500'}`} />
+                    <div className="space-y-1.5">
+                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest pl-1">Password</label>
+                        <div className="relative group">
+                            <Lock className={`absolute left-4 top-3.5 h-5 w-5 transition-colors ${fieldErrors.password ? 'text-red-400' : 'text-slate-500 group-focus-within:text-indigo-400'}`} />
                             <input
                                 name="password"
                                 type="password"
-                                className={`w-full pl-12 pr-4 py-3 bg-slate-950 border ${fieldErrors.password ? 'border-red-500/50 focus:ring-red-500' : 'border-slate-800 focus:ring-blue-500'} rounded-xl text-sm text-white transition-all outline-none focus:ring-2`}
+                                className={`w-full pl-12 pr-4 py-3.5 bg-slate-950/50 border ${fieldErrors.password ? 'border-red-500/50 focus:ring-red-500' : 'border-slate-700/50 focus:border-indigo-500 focus:ring-indigo-500'} rounded-xl text-sm text-white transition-all outline-none focus:ring-1 shadow-inner shadow-black/20`}
                                 placeholder="••••••••"
                                 value={formData.password}
                                 onChange={handleInputChange}
@@ -145,14 +152,14 @@ export default function Register({ onSwitchToLogin }) {
                     </div>
 
                     {/* Confirm Password Field */}
-                    <div>
-                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Confirm Password</label>
-                        <div className="relative">
-                            <Lock className={`absolute left-4 top-3.5 h-5 w-5 ${fieldErrors.passwordConfirmation ? 'text-red-400' : 'text-slate-500'}`} />
+                    <div className="space-y-1.5">
+                        <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest pl-1">Confirm Password</label>
+                        <div className="relative group">
+                            <Lock className={`absolute left-4 top-3.5 h-5 w-5 transition-colors ${fieldErrors.passwordConfirmation ? 'text-red-400' : 'text-slate-500 group-focus-within:text-indigo-400'}`} />
                             <input
                                 name="passwordConfirmation"
                                 type="password"
-                                className={`w-full pl-12 pr-4 py-3 bg-slate-950 border ${fieldErrors.passwordConfirmation ? 'border-red-500/50 focus:ring-red-500' : 'border-slate-800 focus:ring-blue-500'} rounded-xl text-sm text-white transition-all outline-none focus:ring-2`}
+                                className={`w-full pl-12 pr-4 py-3.5 bg-slate-950/50 border ${fieldErrors.passwordConfirmation ? 'border-red-500/50 focus:ring-red-500' : 'border-slate-700/50 focus:border-indigo-500 focus:ring-indigo-500'} rounded-xl text-sm text-white transition-all outline-none focus:ring-1 shadow-inner shadow-black/20`}
                                 placeholder="••••••••"
                                 value={formData.passwordConfirmation}
                                 onChange={handleInputChange}
@@ -161,31 +168,31 @@ export default function Register({ onSwitchToLogin }) {
                         {fieldErrors.passwordConfirmation && <p className="text-red-400 text-xs mt-1.5 font-medium pl-1">{fieldErrors.passwordConfirmation}</p>}
                     </div>
 
-                    <button type="submit" disabled={isSubmitting} className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50">
+                    <button type="submit" disabled={isSubmitting} className="w-full bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-bold py-3.5 px-4 rounded-xl hover:from-indigo-400 hover:to-indigo-500 transition-all duration-300 flex items-center justify-center gap-2 text-sm disabled:opacity-50 shadow-[0_0_20px_rgba(99,102,241,0.2)] hover:shadow-[0_0_25px_rgba(99,102,241,0.4)] border border-indigo-400/30 mt-4">
                         {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Register'}
                     </button>
                 </form>
 
                 <div className="relative flex py-2 items-center">
-                    <div className="flex-grow border-t border-slate-800"></div>
-                    <span className="flex-shrink mx-4 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                    <div className="flex-grow border-t border-slate-700/50"></div>
+                    <span className="flex-shrink mx-4 text-slate-500 text-[10px] font-bold uppercase tracking-widest">
                         Or continue with
                     </span>
-                    <div className="flex-grow border-t border-slate-800"></div>
+                    <div className="flex-grow border-t border-slate-700/50"></div>
                 </div>
 
                 <button
                     onClick={() => handleSocialLogin('google')}
                     type="button"
-                    className="w-full bg-slate-950 hover:bg-slate-900 border border-slate-800 text-slate-200 font-semibold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-3 text-sm"
+                    className="w-full bg-slate-800/40 hover:bg-slate-700/50 border border-slate-700/50 text-slate-200 font-bold py-3.5 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 text-sm group"
                 >
-                    <FcGoogle className="h-5 w-5" />
+                    <FcGoogle className="h-5 w-5 group-hover:scale-110 transition-transform" />
                     Google Account
                 </button>
 
-                <p className="text-xs text-center text-slate-400">
+                <p className="text-sm text-center text-slate-400 font-medium">
                     Already have an account?{' '}
-                    <button onClick={onSwitchToLogin} className="text-blue-400 hover:underline font-semibold">Sign In</button>
+                    <button onClick={onSwitchToLogin} className="text-indigo-400 font-bold hover:text-gold-400 transition-colors">Sign In</button>
                 </p>
             </div>
         </div>

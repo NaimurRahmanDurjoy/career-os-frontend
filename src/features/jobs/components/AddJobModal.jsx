@@ -9,7 +9,7 @@ export default function AddJobModal({ isOpen, onClose }) {
         role: '',
         salary_range: '',
         status: 'applied',
-        application_date: new Date().toISOString().split('T')[0]
+        applied_at: new Date().toISOString().split('T')[0]
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,7 +27,7 @@ export default function AddJobModal({ isOpen, onClose }) {
                 role: '',
                 salary_range: '',
                 status: 'applied',
-                application_date: new Date().toISOString().split('T')[0]
+                applied_at: new Date().toISOString().split('T')[0]
             });
         } catch (error) {
             console.error(error);
@@ -94,9 +94,9 @@ export default function AddJobModal({ isOpen, onClose }) {
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Application Date</label>
                             <input
                                 type="date"
-                                name="application_date"
+                                name="applied_at"
                                 required
-                                value={formData.application_date}
+                                value={formData.applied_at}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900 dark:text-white transition-all"
                             />

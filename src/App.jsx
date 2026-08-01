@@ -4,11 +4,13 @@ import { useResumeStore } from './features/resumes/store/useResumeStore.js';
 import Login from './features/auth/components/Login';
 import Register from './features/auth/components/Register';
 import OAuthCallback from './features/auth/components/OAuthCallback';
+import Profile from './features/auth/components/Profile';
 import ResumeUploader from './features/resumes/components/ResumeUploader';
 import AnalysisDashboard from './features/resumes/components/AnalysisDashboard';
 import JobsDashboard from './features/jobs/JobsDashboard';
 import MainLayout from './components/layout/MainLayout';
 import { Loader2 } from 'lucide-react';
+import { useThemeStore } from './store/useThemeStore.js';
 
 export default function App() {
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -21,6 +23,9 @@ export default function App() {
   const [authView, setAuthView] = useState('login');
 
   useEffect(() => {
+    // Initialize Theme
+    useThemeStore.getState().initTheme();
+
     // If not in oauth callback, initialize auth as usual
     if (!window.location.pathname.startsWith('/oauth/callback')) {
       initializeAuth();
@@ -53,13 +58,13 @@ export default function App() {
     <MainLayout activeView={activeView} setActiveView={setActiveView}>
       {activeView === 'resume' && (
         !resumeAnalysisData ? (
-          <div className="space-y-8 max-w-2xl mx-auto text-center mt-12">
-            <div className="space-y-2">
-              <h1 className="text-4xl font-black text-white tracking-tight sm:text-5xl">
-                Optimize Your Application Strategy
+          <div className="space-y-6 max-w-3xl mx-auto text-center mt-20 relative z-10">
+            <div className="space-y-4">
+              <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-100 to-slate-400 tracking-tight sm:text-6xl pb-2">
+                Optimize Your Application
               </h1>
-              <p className="text-slate-400 text-sm max-w-md mx-auto leading-relaxed">
-                Upload your document file below to evaluate compliance factors against standard machine parsing nodes.
+              <p className="text-indigo-200/70 text-base max-w-xl mx-auto leading-relaxed font-medium">
+                Upload your resume file below to automatically extract and parse your career data into your professional portfolio.
               </p>
             </div>
             <ResumeUploader />
@@ -71,6 +76,10 @@ export default function App() {
 
       {activeView === 'jobs' && (
         <JobsDashboard />
+      )}
+
+      {activeView === 'profile' && (
+        <Profile />
       )}
     </MainLayout>
   );

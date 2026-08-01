@@ -27,33 +27,33 @@ export default function KanbanBoard() {
     };
 
     return (
-        <div className="flex w-full gap-4 overflow-x-auto pb-4 snap-x">
+        <div className="flex w-full gap-4 overflow-x-auto pb-4 snap-x h-full">
             {COLUMNS.map((col) => {
                 const columnJobs = jobs.filter(job => job.status === col.id);
                 return (
                     <div
                         key={col.id}
-                        className="flex-none w-80 lg:flex-1 shrink-0 bg-gray-50/50 dark:bg-gray-800/40 rounded-2xl p-4 border border-gray-100 dark:border-gray-800/60 flex flex-col min-h-[600px] snap-center"
+                        className="flex-none w-[320px] lg:flex-1 shrink-0 bg-slate-50 dark:bg-slate-800 backdrop-blur-md rounded-3xl p-5 border border-slate-200 dark:border-white/10 flex flex-col h-full snap-center shadow-lg shadow-emerald-900/5 dark:shadow-black/20"
                         onDragOver={handleDragOver}
                         onDrop={(e) => handleDrop(e, col.id)}
                     >
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className={`font-semibold text-sm px-3 py-1 rounded-full border ${col.color}`}>
+                        <div className="flex items-center justify-between mb-5 border-b border-slate-200 dark:border-white/10 pb-3">
+                            <h2 className={`font-bold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full border shadow-inner ${col.color}`}>
                                 {col.label}
                             </h2>
-                            <span className="text-gray-400 dark:text-gray-500 font-medium text-sm flex items-center justify-center bg-white dark:bg-gray-900 shadow-sm w-7 h-7 rounded-full">
+                            <span className="text-slate-600 dark:text-slate-300 font-black text-xs flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-inner w-7 h-7 rounded-full">
                                 {columnJobs.length}
                             </span>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto space-y-3 pretty-scrollbar">
+                        <div className="flex-1 overflow-y-auto space-y-4 pretty-scrollbar pr-2 pb-2">
                             {columnJobs.map((job) => (
                                 <JobCard key={job.id} job={job} />
                             ))}
                             {columnJobs.length === 0 && (
-                                <div className="h-full w-full flex flex-col items-center justify-center opacity-50 py-10">
-                                    <Layers className="text-gray-300 dark:text-gray-600 mb-2" size={24} />
-                                    <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">Drop jobs here</p>
+                                <div className="h-[200px] w-full flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 dark:border-white/10 bg-slate-100/50 dark:bg-slate-900/30 mt-2">
+                                    <Layers className="text-emerald-500/40 mb-3" size={28} />
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest">No jobs in this stage</p>
                                 </div>
                             )}
                         </div>
