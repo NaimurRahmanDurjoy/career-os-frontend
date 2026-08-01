@@ -48,7 +48,7 @@ export const authApi = {
    */
   async getCurrentUser() {
     const response = await apiClient.get('/user');
-    return response.data;
+    return response.data.user;
   },
 
   /**
@@ -59,6 +59,26 @@ export const authApi = {
    */
   async handleSocialCallback(provider, searchParams) {
     const response = await apiClient.get(`/auth/${provider}/callback${searchParams}`);
+    return response.data;
+  },
+
+  /**
+   * Updates the current authenticated user's profile information
+   */
+  async updateProfile(name, email) {
+    const response = await apiClient.put('/user', { name, email });
+    return response.data;
+  },
+
+  /**
+   * Updates the current user's password payload
+   */
+  async updatePassword(currentPassword, newPassword, newPasswordConfirmation) {
+    const response = await apiClient.put('/user/password', {
+      current_password: currentPassword,
+      password: newPassword,
+      password_confirmation: newPasswordConfirmation
+    });
     return response.data;
   }
 };
