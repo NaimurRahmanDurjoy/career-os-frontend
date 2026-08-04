@@ -14,9 +14,9 @@ export default function JobsDashboard() {
     return (
         <div className="md:px-8 max-w-[1600px] w-full mx-auto h-[calc(100vh-12rem)] flex flex-col relative z-10 overflow-hidden">
             {/* Header section with gradient title */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-4 border-b border-slate-200 dark:border-white/10 transition-colors duration-300">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-5 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
                 <div>
-                    <h1 className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500 dark:from-white dark:to-slate-400 tracking-tight transition-colors duration-300">
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight transition-colors duration-300">
                         Job Tracker
                     </h1>
                     <p className="text-slate-500 dark:text-slate-400 font-medium text-sm mt-1 transition-colors duration-300">
@@ -25,9 +25,9 @@ export default function JobsDashboard() {
                 </div>
                 <button
                     onClick={() => setIsAddModalOpen(true)}
-                    className="mt-4 sm:mt-0 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] text-white font-bold rounded-xl transition-all outline-none border border-emerald-400 flex items-center justify-center gap-2 text-sm"
+                    className="mt-4 sm:mt-0 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-colors flex items-center gap-2 text-sm"
                 >
-                    <span className="font-black">+</span> Add Application
+                    <span className="font-bold">+</span> Add Application
                 </button>
             </div>
 

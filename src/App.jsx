@@ -60,10 +60,10 @@ export default function App() {
         !resumeAnalysisData ? (
           <div className="space-y-6 max-w-3xl mx-auto text-center mt-20 relative z-10">
             <div className="space-y-4">
-              <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-indigo-100 to-slate-400 tracking-tight sm:text-6xl pb-2">
+              <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 tracking-tight sm:text-6xl pb-2">
                 Optimize Your Application
               </h1>
-              <p className="text-indigo-200/70 text-base max-w-xl mx-auto leading-relaxed font-medium">
+              <p className="text-slate-600 dark:text-slate-400 text-base max-w-xl mx-auto leading-relaxed font-medium">
                 Upload your resume file below to automatically extract and parse your career data into your professional portfolio.
               </p>
             </div>
