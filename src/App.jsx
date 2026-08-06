@@ -8,6 +8,7 @@ import Profile from './features/auth/components/Profile';
 import ResumeUploader from './features/resumes/components/ResumeUploader';
 import AnalysisDashboard from './features/resumes/components/AnalysisDashboard';
 import JobsDashboard from './features/jobs/JobsDashboard';
+import DashboardPage from './features/dashboard/DashboardPage';
 import MainLayout from './components/layout/MainLayout';
 import { Loader2 } from 'lucide-react';
 import { useThemeStore } from './store/useThemeStore.js';
@@ -19,7 +20,7 @@ export default function App() {
   const resumeAnalysisData = useResumeStore((state) => state.analysisData);
 
   // New Navigation State
-  const [activeView, setActiveView] = useState('resume');
+  const [activeView, setActiveView] = useState('dashboard');
   const [authView, setAuthView] = useState('login');
 
   useEffect(() => {
@@ -56,6 +57,10 @@ export default function App() {
 
   return (
     <MainLayout activeView={activeView} setActiveView={setActiveView}>
+      {activeView === 'dashboard' && (
+        <DashboardPage />
+      )}
+
       {activeView === 'resume' && (
         !resumeAnalysisData ? (
           <div className="space-y-6 max-w-3xl mx-auto text-center mt-20 relative z-10">

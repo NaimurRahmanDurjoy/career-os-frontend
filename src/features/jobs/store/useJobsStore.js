@@ -54,5 +54,35 @@ export const useJobsStore = create((set, get) => ({
             set({ jobs: originalJobs });
             console.error('Failed to delete job:', error);
         }
+    },
+
+    // --- Notes Actions ---
+    fetchNotes: async (jobId) => {
+        try {
+            const response = await apiClient.get(`/jobs/${jobId}/notes`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch notes:', error);
+            throw error;
+        }
+    },
+
+    addNote: async (jobId, title, content) => {
+        try {
+            const response = await apiClient.post(`/jobs/${jobId}/notes`, { title, content });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to add note:', error);
+            throw error;
+        }
+    },
+
+    deleteNote: async (noteId) => {
+        try {
+            await apiClient.delete(`/notes/${noteId}`);
+        } catch (error) {
+            console.error('Failed to delete note:', error);
+            throw error;
+        }
     }
 }));

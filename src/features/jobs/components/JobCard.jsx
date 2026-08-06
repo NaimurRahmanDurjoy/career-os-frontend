@@ -1,8 +1,8 @@
 import React from 'react';
 import { useJobsStore } from '../store/useJobsStore';
-import { Briefcase, Calendar, Banknote, Trash2 } from 'lucide-react';
+import { Briefcase, Calendar, Banknote, Trash2, FileText } from 'lucide-react';
 
-export default function JobCard({ job }) {
+export default function JobCard({ job, onOpenNotes }) {
     const { deleteJob, updateJobStatus } = useJobsStore();
 
     const statuses = ['applied', 'shortlisted', 'interview', 'offer', 'rejected'];
@@ -30,12 +30,21 @@ export default function JobCard({ job }) {
                 <h3 className="font-bold text-slate-800 dark:text-slate-200 line-clamp-1 flex-1 tracking-wide">
                     {job.company_name}
                 </h3>
-                <button
-                    onClick={() => deleteJob(job.id)}
-                    className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 transition-opacity p-1 -mt-1 -mr-1"
-                >
-                    <Trash2 size={16} />
-                </button>
+                <div className="flex items-center space-x-1">
+                    <button
+                        onClick={() => onOpenNotes(job)}
+                        className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-emerald-500 transition-opacity p-1 -mt-1"
+                        title="Application Notes"
+                    >
+                        <FileText size={16} />
+                    </button>
+                    <button
+                        onClick={() => deleteJob(job.id)}
+                        className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 transition-opacity p-1 -mt-1 -mr-1"
+                    >
+                        <Trash2 size={16} />
+                    </button>
+                </div>
             </div>
 
             <div className="flex items-center text-sm text-emerald-600 dark:text-emerald-400 font-medium mb-3 relative z-10">

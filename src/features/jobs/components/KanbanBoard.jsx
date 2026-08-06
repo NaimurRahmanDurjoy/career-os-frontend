@@ -11,7 +11,7 @@ const COLUMNS = [
     { id: 'rejected', label: 'Rejected', color: 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800' }
 ];
 
-export default function KanbanBoard() {
+export default function KanbanBoard({ onOpenNotes }) {
     const { jobs, updateJobStatus } = useJobsStore();
 
     const handleDragOver = (e) => {
@@ -48,7 +48,7 @@ export default function KanbanBoard() {
 
                         <div className="flex-1 overflow-y-auto space-y-4 pretty-scrollbar pr-2 pb-2">
                             {columnJobs.map((job) => (
-                                <JobCard key={job.id} job={job} />
+                                <JobCard key={job.id} job={job} onOpenNotes={onOpenNotes} />
                             ))}
                             {columnJobs.length === 0 && (
                                 <div className="h-[200px] w-full flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 dark:border-white/10 bg-slate-100/50 dark:bg-slate-900/30 mt-2">
