@@ -8,9 +8,12 @@ import Profile from './features/auth/components/Profile';
 import ResumeUploader from './features/resumes/components/ResumeUploader';
 import AnalysisDashboard from './features/resumes/components/AnalysisDashboard';
 import ResumeVersionList from './features/resumes/components/ResumeVersionList';
+import CoverLetterModal from './features/jobs/components/CoverLetterModal';
 import JobsDashboard from './features/jobs/JobsDashboard';
 import ReminderList from './features/reminders/components/ReminderList';
 import MatchCheckerPage from './features/match-checker/MatchCheckerPage';
+import PreparationTrackerPage from './features/preparation/PreparationTrackerPage';
+import MockTestDashboard from './features/mock-tests/MockTestDashboard';
 import DashboardPage from './features/dashboard/DashboardPage';
 import MainLayout from './components/layout/MainLayout';
 import { Loader2 } from 'lucide-react';
@@ -102,6 +105,14 @@ export default function App() {
 
       {activeView === 'match-checker' && (
         <MatchCheckerPage />
+      )}
+
+      {activeView === 'preparation' && (
+        <PreparationTrackerPage />
+      )}
+
+      {activeView === 'mock-tests' && (
+        <MockTestDashboard />
       )}
 
       {activeView === 'profile' && (

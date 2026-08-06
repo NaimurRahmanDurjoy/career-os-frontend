@@ -1,5 +1,16 @@
 import React from 'react';
-import { FileText, Kanban, LogOut, Briefcase, LayoutDashboard, Bell, Target } from 'lucide-react';
+import { useAuthStore } from '../../features/auth/store/useAuthStore';
+import {
+    FileText,
+    Kanban,
+    LogOut,
+    Briefcase,
+    LayoutDashboard,
+    Bell,
+    Target,
+    BookOpen,
+    BrainCircuit
+} from 'lucide-react';
 
 export default function Sidebar({ activeView, setActiveView, user, logout }) {
     const navItems = [
@@ -7,6 +18,8 @@ export default function Sidebar({ activeView, setActiveView, user, logout }) {
         { id: 'resume', label: 'Resume Analyzer', icon: FileText },
         { id: 'jobs', label: 'Job Tracker', icon: Kanban },
         { id: 'match-checker', label: 'Job Match Checker', icon: Target },
+        { id: 'preparation', label: 'Prep Tracker', icon: BookOpen },
+        { id: 'mock-tests', label: 'AI Mock Tests', icon: BrainCircuit },
         { id: 'reminders', label: 'Reminders', icon: Bell }
     ];
 
