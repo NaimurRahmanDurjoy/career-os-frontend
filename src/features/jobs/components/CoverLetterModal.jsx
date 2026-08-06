@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Copy, CheckCircle2, Download, Zap, FileText } from 'lucide-react';
+import { X, Copy, CheckCircle2, Download, Zap, FileText, Upload, Save } from 'lucide-react';
 import { useJobsStore } from '../store/useJobsStore';
 
 export default function CoverLetterModal({ job, isOpen, onClose }) {
-    const { generateCoverLetter } = useJobsStore();
+    const { generateCoverLetter, saveManualCoverLetter } = useJobsStore();
     const [letter, setLetter] = useState(null);
     const [loading, setLoading] = useState(false);
     const [copied, setCopied] = useState(false);
     const [error, setError] = useState(null);
+    const [isManualEntry, setIsManualEntry] = useState(false);
+    const [manualText, setManualText] = useState('');
 
     React.useEffect(() => {
         if (!isOpen) {
@@ -17,6 +19,8 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
                 setLetter(null);
                 setCopied(false);
                 setError(null);
+                setIsManualEntry(false);
+                setManualText('');
             }, 300);
         } else {
             // Load from DB if it exists
@@ -39,6 +43,21 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
             setLetter(data.cover_letter);
         } catch (err) {
             setError(err.response?.data?.message || err.message || "Failed to generate cover letter.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSaveManual = async () => {
+        if (!manualText.trim()) return;
+        setLoading(true);
+        setError(null);
+        try {
+            await saveManualCoverLetter(job.id, manualText);
+            setLetter(manualText);
+            setIsManualEntry(false);
+        } catch (err) {
+            setError(err.response?.data?.message || err.message || "Failed to save cover letter.");
         } finally {
             setLoading(false);
         }
@@ -110,6 +129,31 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
                         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm min-h-full whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-serif">
                             {letter}
                         </div>
+                    ) : isManualEntry ? (
+                        <div className="h-full flex flex-col items-center">
+                            <h3 className="font-bold text-slate-800 dark:text-slate-100 mb-3 text-lg w-full text-left">Paste Your Cover Letter</h3>
+                            <textarea
+                                value={manualText}
+                                onChange={(e) => setManualText(e.target.value)}
+                                placeholder="Paste your manually written cover letter here..."
+                                className="w-full flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl resize-none outline-none focus:ring-2 focus:ring-emerald-500 font-serif text-sm text-slate-700 dark:text-slate-300"
+                            />
+                            <div className="flex justify-end gap-3 w-full mt-4">
+                                <button
+                                    onClick={() => setIsManualEntry(false)}
+                                    className="px-4 py-2 font-bold text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleSaveManual}
+                                    disabled={!manualText.trim()}
+                                    className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white font-bold rounded-lg transition-colors flex items-center gap-2"
+                                >
+                                    <Save size={16} /> Save Letter
+                                </button>
+                            </div>
+                        </div>
                     ) : (
                         <div className="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto">
                             <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/20 text-emerald-500 rounded-full flex items-center justify-center mb-6 shadow-inner border border-emerald-200 dark:border-emerald-800/50">
@@ -121,10 +165,17 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
                             </p>
                             <button
                                 onClick={handleGenerate}
-                                className="px-8 py-3 bg-slate-900 dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg flex items-center gap-2"
+                                className="px-8 py-3 w-full max-w-xs bg-slate-900 dark:bg-emerald-600 hover:bg-slate-800 dark:hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg flex justify-center items-center gap-2 mb-4"
                             >
                                 <Zap size={18} />
                                 Synthesize Cover Letter
+                            </button>
+                            <button
+                                onClick={() => setIsManualEntry(true)}
+                                className="px-8 py-3 w-full max-w-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-700 dark:text-slate-300 font-bold rounded-xl transition-all flex justify-center items-center gap-2"
+                            >
+                                <Upload size={18} className="text-slate-400" />
+                                Paste Existing Letter
                             </button>
                         </div>
                     )}

@@ -121,6 +121,25 @@ export const useJobsStore = create((set, get) => ({
         }
     },
 
+    saveManualCoverLetter: async (jobId, text) => {
+        try {
+            await apiClient.post(`/jobs/${jobId}/cover-letter`, { cover_letter: text });
+
+            // Update local state so it appears immediately if relying on cached jobs
+            set((state) => ({
+                jobs: state.jobs.map(job =>
+                    job.id === jobId
+                        ? { ...job, ai_match: { ...(job.ai_match || {}), generated_cover_letter: text } }
+                        : job
+                )
+            }));
+            return true;
+        } catch (error) {
+            console.error('Failed to manually save cover letter:', error);
+            throw error;
+        }
+    },
+
     generateInterviewPrep: async (jobId) => {
         try {
             const response = await apiClient.post('/ai-tools/interview-questions', { job_application_id: jobId });
