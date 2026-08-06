@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useJobsStore } from '../store/useJobsStore';
-import { Briefcase, Calendar, Banknote, Trash2, FileText } from 'lucide-react';
-import AiMatchBadge from './AiMatchBadge';
+import { Briefcase, Calendar, Banknote, Trash2, FileText, Bot, AlertCircle } from 'lucide-react';
+import InterviewPrepPanel from './InterviewPrepPanel';
+import RejectionAnalysisModal from './RejectionAnalysisModal';
+import NegotiationTipsModal from './NegotiationTipsModal';
 
 export default function JobCard({ job, onOpenNotes }) {
     const { deleteJob, updateJobStatus } = useJobsStore();
+    const [showInterviewPrep, setShowInterviewPrep] = useState(false);
+    const [showRejectionAnalysis, setShowRejectionAnalysis] = useState(false);
+    const [showNegotiation, setShowNegotiation] = useState(false);
 
     const statuses = ['applied', 'shortlisted', 'interview', 'offer', 'rejected'];
 
@@ -65,9 +70,37 @@ export default function JobCard({ job, onOpenNotes }) {
                 </div>
             </div>
 
-            <div className="relative z-10 mt-1">
-                <AiMatchBadge job={job} />
+            <div className="relative z-10 mt-1 flex flex-wrap gap-2">
+                <button
+                    onClick={() => setShowInterviewPrep(true)}
+                    title="AI Interview Simulator"
+                    className="flex items-center text-[10px] uppercase font-bold text-slate-500 hover:text-purple-600 bg-slate-100 hover:bg-purple-50 dark:bg-slate-800/50 dark:hover:bg-purple-900/40 px-2 py-1 rounded border border-slate-200 dark:border-slate-700/50 hover:border-purple-300 dark:hover:border-purple-700 transition-colors mt-2"
+                >
+                    <Bot size={11} className="mr-1" /> Simulator
+                </button>
+                {job.status === 'rejected' && (
+                    <button
+                        onClick={() => setShowRejectionAnalysis(true)}
+                        title="AI Rejection Insights"
+                        className="flex items-center text-[10px] uppercase font-bold text-slate-500 hover:text-rose-600 bg-slate-100 hover:bg-rose-50 dark:bg-slate-800/50 dark:hover:bg-rose-900/40 px-2 py-1 rounded border border-slate-200 dark:border-slate-700/50 hover:border-rose-300 dark:hover:border-rose-700 transition-colors mt-2"
+                    >
+                        <AlertCircle size={11} className="mr-1" /> Insights
+                    </button>
+                )}
+                {job.status === 'offer' && (
+                    <button
+                        onClick={() => setShowNegotiation(true)}
+                        title="Salary Negotiation Tips"
+                        className="flex items-center text-[10px] uppercase font-bold text-slate-500 hover:text-emerald-600 bg-slate-100 hover:bg-emerald-50 dark:bg-slate-800/50 dark:hover:bg-emerald-900/40 px-2 py-1 rounded border border-slate-200 dark:border-slate-700/50 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors mt-2"
+                    >
+                        <Banknote size={11} className="mr-1" /> Negotiate
+                    </button>
+                )}
             </div>
+
+            <InterviewPrepPanel job={job} isOpen={showInterviewPrep} onClose={() => setShowInterviewPrep(false)} />
+            <RejectionAnalysisModal job={job} isOpen={showRejectionAnalysis} onClose={() => setShowRejectionAnalysis(false)} />
+            <NegotiationTipsModal job={job} isOpen={showNegotiation} onClose={() => setShowNegotiation(false)} />
 
             {/* Mobile quick status change fallback if Drag and Drop is hard */}
             <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700/50 lg:hidden relative z-10">

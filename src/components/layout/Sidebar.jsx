@@ -6,7 +6,7 @@ export default function Sidebar({ activeView, setActiveView, user, logout }) {
         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'resume', label: 'Resume Analyzer', icon: FileText },
         { id: 'jobs', label: 'Job Tracker', icon: Kanban },
-        { id: 'match-checker', label: 'Match Checker', icon: Target },
+        { id: 'match-checker', label: 'Job Match Checker', icon: Target },
         { id: 'reminders', label: 'Reminders', icon: Bell }
     ];
 

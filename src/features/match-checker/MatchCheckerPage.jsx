@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Target, Zap, AlertCircle, RefreshCw, FileText } from 'lucide-react';
+import { Target, Zap, AlertCircle, RefreshCw, FileText, Copy, CheckCircle2 } from 'lucide-react';
 import { useMatchCheckerStore } from './store/useMatchCheckerStore';
 import { useResumeStore } from '../resumes/store/useResumeStore';
 
 export default function MatchCheckerPage() {
-    const { evaluationCache, isEvaluating, error, evaluateMatch, clearEvaluation } = useMatchCheckerStore();
+    const { evaluationCache, coverLetterCache, isEvaluating, isGeneratingLetter, error, evaluateMatch, generateCoverLetter, clearEvaluation } = useMatchCheckerStore();
     const { resumes, fetchResumes } = useResumeStore();
+
+    const [copiedLetter, setCopiedLetter] = useState(false);
 
     const [selectedResumeId, setSelectedResumeId] = useState('');
     const [jobDescription, setJobDescription] = useState('');
@@ -30,6 +32,14 @@ export default function MatchCheckerPage() {
     const handleClear = () => {
         setJobDescription('');
         clearEvaluation();
+    };
+
+    const handleCopyLetter = () => {
+        if (coverLetterCache) {
+            navigator.clipboard.writeText(coverLetterCache);
+            setCopiedLetter(true);
+            setTimeout(() => setCopiedLetter(false), 2000);
+        }
     };
 
     const getScoreColor = (score) => {
@@ -80,7 +90,7 @@ export default function MatchCheckerPage() {
                             placeholder="Copy & paste the raw job requirements here..."
                         />
 
-                        <div className="flex gap-4">
+                        <div className="flex gap-4 mb-4">
                             <button
                                 onClick={handleCheck}
                                 disabled={isEvaluating || !selectedResumeId || !jobDescription.trim()}
@@ -99,6 +109,18 @@ export default function MatchCheckerPage() {
                                 Reset
                             </button>
                         </div>
+
+                        <button
+                            onClick={() => generateCoverLetter(selectedResumeId, jobDescription)}
+                            disabled={isGeneratingLetter || !selectedResumeId || !jobDescription.trim()}
+                            className="w-full py-3 bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-bold rounded-xl transition-all border border-slate-200 dark:border-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700/50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm"
+                        >
+                            {isGeneratingLetter ? (
+                                <><RefreshCw size={18} className="animate-spin" /> Drafting Letter...</>
+                            ) : (
+                                <><FileText size={18} /> Generate Cover Letter</>
+                            )}
+                        </button>
                     </div>
                 </div>
 
@@ -175,13 +197,35 @@ export default function MatchCheckerPage() {
                                 </div>
                             </div>
                         </div>
-                    ) : (
+                    ) : null}
+
+                    {!evaluationCache && !coverLetterCache && !error && (
                         <div className="h-full border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center text-center p-8 bg-slate-50/50 dark:bg-slate-900/20">
                             <Target size={48} className="text-indigo-200 dark:text-indigo-900/50 mb-4" />
                             <h3 className="font-bold text-slate-400 dark:text-slate-500 mb-2">Ready to evaluate</h3>
                             <p className="text-sm text-slate-400 dark:text-slate-600 max-w-xs">
                                 Select a resume and paste a job description. We'll extract the requirements and compare them to your profile instantly.
                             </p>
+                        </div>
+                    )}
+
+                    {coverLetterCache && (
+                        <div className="mt-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-8 rounded-2xl shadow-xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-500">
+                            <div className="flex justify-between items-end mb-4">
+                                <h3 className="font-bold text-sm text-slate-800 dark:text-slate-200 uppercase tracking-wide flex items-center gap-2">
+                                    <FileText size={16} className="text-indigo-500" /> Professional Cover Letter
+                                </h3>
+                                <button
+                                    onClick={handleCopyLetter}
+                                    className="text-xs flex items-center gap-1 font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 dark:bg-indigo-900/40 px-3 py-1.5 rounded-lg transition-colors"
+                                >
+                                    {copiedLetter ? <CheckCircle2 size={14} /> : <Copy size={14} />}
+                                    {copiedLetter ? 'Copied' : 'Copy'}
+                                </button>
+                            </div>
+                            <div className="whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-serif p-5 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-100 dark:border-slate-800/50">
+                                {coverLetterCache}
+                            </div>
                         </div>
                     )}
                 </div>
