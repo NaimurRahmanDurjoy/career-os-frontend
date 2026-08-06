@@ -4,6 +4,7 @@ import { useAuthStore } from '../../features/auth/store/useAuthStore';
 
 import { Sun, Moon, User } from 'lucide-react';
 import { useThemeStore } from '../../store/useThemeStore';
+import ReminderBell from '../../features/reminders/components/ReminderBell';
 
 export default function MainLayout({ children, activeView, setActiveView }) {
     const user = useAuthStore((state) => state.user);
@@ -29,6 +30,8 @@ export default function MainLayout({ children, activeView, setActiveView }) {
                     </div>
 
                     <div className="flex items-center gap-4">
+                        <ReminderBell />
+
                         <button
                             onClick={toggleTheme}
                             className="p-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 hover:text-emerald-500 dark:text-slate-400 dark:hover:text-emerald-400 transition-colors"

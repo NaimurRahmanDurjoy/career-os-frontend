@@ -9,6 +9,8 @@ import ResumeUploader from './features/resumes/components/ResumeUploader';
 import AnalysisDashboard from './features/resumes/components/AnalysisDashboard';
 import ResumeVersionList from './features/resumes/components/ResumeVersionList';
 import JobsDashboard from './features/jobs/JobsDashboard';
+import ReminderList from './features/reminders/components/ReminderList';
+import MatchCheckerPage from './features/match-checker/MatchCheckerPage';
 import DashboardPage from './features/dashboard/DashboardPage';
 import MainLayout from './components/layout/MainLayout';
 import { Loader2 } from 'lucide-react';
@@ -92,6 +94,14 @@ export default function App() {
 
       {activeView === 'jobs' && (
         <JobsDashboard />
+      )}
+
+      {activeView === 'reminders' && (
+        <ReminderList />
+      )}
+
+      {activeView === 'match-checker' && (
+        <MatchCheckerPage />
       )}
 
       {activeView === 'profile' && (

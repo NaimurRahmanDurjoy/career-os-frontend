@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Sparkles, RefreshCw } from 'lucide-react';
 import { useJobsStore } from '../store/useJobsStore';
+import apiClient from '../../../lib/apiClient';
 
 export default function AddJobModal({ isOpen, onClose }) {
     const { addJob, loading } = useJobsStore();
@@ -14,8 +15,32 @@ export default function AddJobModal({ isOpen, onClose }) {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isParsing, setIsParsing] = useState(false);
 
     if (!isOpen) return null;
+
+    const handleAutoFill = async () => {
+        if (!formData.job_description.trim()) return;
+        setIsParsing(true);
+        try {
+            const res = await apiClient.post('/ai-tools/parse-jd', {
+                job_description: formData.job_description
+            });
+            const data = res.data.parsed_data;
+            if (data) {
+                setFormData(prev => ({
+                    ...prev,
+                    company_name: data.company_name || prev.company_name,
+                    role: data.role || prev.role,
+                    salary_range: data.salary_range || prev.salary_range,
+                }));
+            }
+        } catch (error) {
+            console.error('Failed to parse JD:', error);
+        } finally {
+            setIsParsing(false);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -106,7 +131,18 @@ export default function AddJobModal({ isOpen, onClose }) {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Job Description (optional)</label>
+                        <div className="flex justify-between items-end mb-1">
+                            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Job Description</label>
+                            <button
+                                type="button"
+                                onClick={handleAutoFill}
+                                disabled={isParsing || !formData.job_description.trim()}
+                                className="text-xs flex items-center gap-1 font-bold text-indigo-500 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 disabled:opacity-50 transition-all bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded"
+                            >
+                                {isParsing ? <RefreshCw size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                                AI Auto-Fill
+                            </button>
+                        </div>
                         <textarea
                             name="job_description"
                             value={formData.job_description}

@@ -108,5 +108,46 @@ export const useJobsStore = create((set, get) => ({
             }
             return null;
         }
+    },
+
+    // --- AI Generator Actions ---
+    generateCoverLetter: async (jobId) => {
+        try {
+            const response = await apiClient.post('/ai-tools/cover-letter', { job_application_id: jobId });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to generate cover letter:', error);
+            throw error;
+        }
+    },
+
+    generateInterviewPrep: async (jobId) => {
+        try {
+            const response = await apiClient.post('/ai-tools/interview-questions', { job_application_id: jobId });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to generate interview prep:', error);
+            throw error;
+        }
+    },
+
+    analyzeRejection: async (jobId) => {
+        try {
+            const response = await apiClient.post('/ai-tools/rejection-analysis', { job_application_id: jobId });
+            return response.data.analysis;
+        } catch (error) {
+            console.error('Failed to analyze rejection:', error);
+            throw error;
+        }
+    },
+
+    generateNegotiationTips: async (jobId) => {
+        try {
+            const response = await apiClient.post('/ai-tools/salary-negotiation', { job_application_id: jobId });
+            return response.data.negotiation;
+        } catch (error) {
+            console.error('Failed to generate negotiation tips:', error);
+            throw error;
+        }
     }
 }));

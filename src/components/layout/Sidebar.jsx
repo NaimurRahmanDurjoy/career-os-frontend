@@ -1,11 +1,13 @@
 import React from 'react';
-import { FileText, Kanban, LogOut, Briefcase, LayoutDashboard } from 'lucide-react';
+import { FileText, Kanban, LogOut, Briefcase, LayoutDashboard, Bell, Target } from 'lucide-react';
 
 export default function Sidebar({ activeView, setActiveView, user, logout }) {
     const navItems = [
         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { id: 'resume', label: 'Resume Analyzer', icon: FileText },
-        { id: 'jobs', label: 'Job Tracker', icon: Kanban }
+        { id: 'jobs', label: 'Job Tracker', icon: Kanban },
+        { id: 'match-checker', label: 'Match Checker', icon: Target },
+        { id: 'reminders', label: 'Reminders', icon: Bell }
     ];
 
     return (
