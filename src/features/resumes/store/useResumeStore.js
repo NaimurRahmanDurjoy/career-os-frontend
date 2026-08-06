@@ -8,6 +8,7 @@ export const useResumeStore = create((set, get) => ({
   networkError: null,
   validationError: null,
   currentResumeId: null,
+  resumes: [],
 
   clearAnalysisState: () => {
     set({
@@ -41,7 +42,7 @@ export const useResumeStore = create((set, get) => ({
 
       if (resumeRecord && resumeRecord.id) {
         set({ currentResumeId: resumeRecord.id });
-        
+
         // Step 2: Since Laravel queued the task, start polling the show($id) route
         return await get().pollResumeStatus(resumeRecord.id);
       } else {
@@ -167,4 +168,38 @@ export const useResumeStore = create((set, get) => ({
       }, 3000); // Polls every 3000ms (3 seconds) safely
     });
   },
+
+  // --- Versioning Actions ---
+  fetchResumes: async () => {
+    try {
+      const response = await apiClient.get('/resumes');
+      set({ resumes: response.data.resumes || [] });
+    } catch (error) {
+      console.error('Failed to fetch resumes:', error);
+    }
+  },
+
+  deleteResume: async (id) => {
+    try {
+      await apiClient.delete(`/resumes/${id}`);
+      set((state) => ({
+        resumes: state.resumes.filter(r => r.id !== id),
+        analysisData: state.currentResumeId === id ? null : state.analysisData,
+      }));
+    } catch (error) {
+      console.error('Failed to delete resume:', error);
+    }
+  },
+
+  setPrimary: async (id) => {
+    try {
+      const response = await apiClient.patch(`/resumes/${id}/primary`);
+      set((state) => ({
+        resumes: state.resumes.map(r => ({ ...r, is_primary: r.id === id }))
+      }));
+      return response.data;
+    } catch (error) {
+      console.error('Failed to set primary resume:', error);
+    }
+  }
 }));

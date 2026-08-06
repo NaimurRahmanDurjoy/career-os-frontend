@@ -84,5 +84,29 @@ export const useJobsStore = create((set, get) => ({
             console.error('Failed to delete note:', error);
             throw error;
         }
+    },
+
+    // --- AI Job Match Actions ---
+    analyzeJobMatch: async (jobId) => {
+        try {
+            const response = await apiClient.post(`/jobs/${jobId}/ai-match`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to start AI match analysis:', error);
+            throw error;
+        }
+    },
+
+    fetchJobMatch: async (jobId) => {
+        try {
+            const response = await apiClient.get(`/jobs/${jobId}/ai-match`);
+            return response.data;
+        } catch (error) {
+            // Note: 404 is expected if no match has been run yet
+            if (error.response?.status !== 404) {
+                console.error('Failed to fetch job match:', error);
+            }
+            return null;
+        }
     }
 }));

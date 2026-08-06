@@ -8,6 +8,7 @@ export default function AddJobModal({ isOpen, onClose }) {
         company_name: '',
         role: '',
         salary_range: '',
+        job_description: '',
         status: 'applied',
         applied_at: new Date().toISOString().split('T')[0]
     });
@@ -26,6 +27,7 @@ export default function AddJobModal({ isOpen, onClose }) {
                 company_name: '',
                 role: '',
                 salary_range: '',
+                job_description: '',
                 status: 'applied',
                 applied_at: new Date().toISOString().split('T')[0]
             });
@@ -101,6 +103,17 @@ export default function AddJobModal({ isOpen, onClose }) {
                                 className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-slate-900 dark:text-white transition-all"
                             />
                         </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Job Description (optional)</label>
+                        <textarea
+                            name="job_description"
+                            value={formData.job_description}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-slate-900 dark:text-white transition-all placeholder-slate-400 h-24 resize-none"
+                            placeholder="Paste the raw job description here for AI matching..."
+                        />
                     </div>
 
                     <div>

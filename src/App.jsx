@@ -7,6 +7,7 @@ import OAuthCallback from './features/auth/components/OAuthCallback';
 import Profile from './features/auth/components/Profile';
 import ResumeUploader from './features/resumes/components/ResumeUploader';
 import AnalysisDashboard from './features/resumes/components/AnalysisDashboard';
+import ResumeVersionList from './features/resumes/components/ResumeVersionList';
 import JobsDashboard from './features/jobs/JobsDashboard';
 import DashboardPage from './features/dashboard/DashboardPage';
 import MainLayout from './components/layout/MainLayout';
@@ -62,21 +63,31 @@ export default function App() {
       )}
 
       {activeView === 'resume' && (
-        !resumeAnalysisData ? (
-          <div className="space-y-6 max-w-3xl mx-auto text-center mt-20 relative z-10">
-            <div className="space-y-4">
-              <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 tracking-tight sm:text-6xl pb-2">
-                Optimize Your Application
-              </h1>
-              <p className="text-slate-600 dark:text-slate-400 text-base max-w-xl mx-auto leading-relaxed font-medium">
-                Upload your resume file below to automatically extract and parse your career data into your professional portfolio.
-              </p>
-            </div>
-            <ResumeUploader />
+        <div className="md:px-8 max-w-[1600px] w-full mx-auto h-[calc(100vh-8rem)] flex gap-6 relative z-10">
+          {/* Sidebar */}
+          <div className="w-72 shrink-0 hidden lg:block h-full">
+            <ResumeVersionList onSelect={(id) => useResumeStore.getState().pollResumeStatus(id)} />
           </div>
-        ) : (
-          <AnalysisDashboard />
-        )
+
+          {/* Main Area */}
+          <div className="flex-1 overflow-y-auto pr-2 pretty-scrollbar">
+            {!resumeAnalysisData ? (
+              <div className="space-y-6 max-w-3xl mx-auto text-center mt-12">
+                <div className="space-y-4">
+                  <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 tracking-tight sm:text-6xl pb-2">
+                    Optimize Your Application
+                  </h1>
+                  <p className="text-slate-600 dark:text-slate-400 text-base max-w-xl mx-auto leading-relaxed font-medium">
+                    Upload your resume file below to automatically extract and parse your career data.
+                  </p>
+                </div>
+                <ResumeUploader />
+              </div>
+            ) : (
+              <AnalysisDashboard />
+            )}
+          </div>
+        </div>
       )}
 
       {activeView === 'jobs' && (

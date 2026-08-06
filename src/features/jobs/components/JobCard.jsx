@@ -1,6 +1,7 @@
 import React from 'react';
 import { useJobsStore } from '../store/useJobsStore';
 import { Briefcase, Calendar, Banknote, Trash2, FileText } from 'lucide-react';
+import AiMatchBadge from './AiMatchBadge';
 
 export default function JobCard({ job, onOpenNotes }) {
     const { deleteJob, updateJobStatus } = useJobsStore();
@@ -62,6 +63,10 @@ export default function JobCard({ job, onOpenNotes }) {
                     <Calendar size={12} className="mr-1 text-slate-400 dark:text-slate-500" />
                     {new Date(job.applied_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                 </div>
+            </div>
+
+            <div className="relative z-10 mt-1">
+                <AiMatchBadge job={job} />
             </div>
 
             {/* Mobile quick status change fallback if Drag and Drop is hard */}
