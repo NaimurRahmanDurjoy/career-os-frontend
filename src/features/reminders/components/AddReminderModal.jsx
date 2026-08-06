@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Calendar, Clock, Briefcase, FileText } from 'lucide-react';
 import { useReminderStore } from '../store/useReminderStore';
 
@@ -47,7 +48,7 @@ export default function AddReminderModal({ isOpen, onClose }) {
 
     if (!isOpen) return null;
 
-    return (
+    return createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={onClose}></div>
             <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl shadow-xl relative z-10 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
@@ -137,6 +138,7 @@ export default function AddReminderModal({ isOpen, onClose }) {
                     </div>
                 </form>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

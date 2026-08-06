@@ -87,7 +87,7 @@ export default function JobCard({ job, onOpenNotes }) {
                         <AlertCircle size={11} className="mr-1" /> Insights
                     </button>
                 )}
-                {job.status === 'offer' && (
+                {job.status === 'interview' && (
                     <button
                         onClick={() => setShowNegotiation(true)}
                         title="Salary Negotiation Tips"
