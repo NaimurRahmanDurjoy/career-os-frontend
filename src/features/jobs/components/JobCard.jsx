@@ -4,12 +4,14 @@ import { Briefcase, Calendar, Banknote, Trash2, FileText, Bot, AlertCircle } fro
 import InterviewPrepPanel from './InterviewPrepPanel';
 import RejectionAnalysisModal from './RejectionAnalysisModal';
 import NegotiationTipsModal from './NegotiationTipsModal';
+import CoverLetterModal from './CoverLetterModal';
 
 export default function JobCard({ job, onOpenNotes }) {
     const { deleteJob, updateJobStatus } = useJobsStore();
     const [showInterviewPrep, setShowInterviewPrep] = useState(false);
     const [showRejectionAnalysis, setShowRejectionAnalysis] = useState(false);
     const [showNegotiation, setShowNegotiation] = useState(false);
+    const [showCoverLetter, setShowCoverLetter] = useState(false);
 
     const statuses = ['applied', 'shortlisted', 'interview', 'offer', 'rejected'];
 
@@ -72,6 +74,13 @@ export default function JobCard({ job, onOpenNotes }) {
 
             <div className="relative z-10 mt-1 flex flex-wrap gap-2">
                 <button
+                    onClick={() => setShowCoverLetter(true)}
+                    title="Generate Custom Cover Letter"
+                    className="flex items-center text-[10px] uppercase font-bold text-slate-500 hover:text-indigo-600 bg-slate-100 hover:bg-indigo-50 dark:bg-slate-800/50 dark:hover:bg-indigo-900/40 px-2 py-1 rounded border border-slate-200 dark:border-slate-700/50 hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors mt-2"
+                >
+                    <FileText size={11} className="mr-1" /> Cover Letter
+                </button>
+                <button
                     onClick={() => setShowInterviewPrep(true)}
                     title="AI Interview Simulator"
                     className="flex items-center text-[10px] uppercase font-bold text-slate-500 hover:text-purple-600 bg-slate-100 hover:bg-purple-50 dark:bg-slate-800/50 dark:hover:bg-purple-900/40 px-2 py-1 rounded border border-slate-200 dark:border-slate-700/50 hover:border-purple-300 dark:hover:border-purple-700 transition-colors mt-2"
@@ -98,6 +107,7 @@ export default function JobCard({ job, onOpenNotes }) {
                 )}
             </div>
 
+            <CoverLetterModal job={job} isOpen={showCoverLetter} onClose={() => setShowCoverLetter(false)} />
             <InterviewPrepPanel job={job} isOpen={showInterviewPrep} onClose={() => setShowInterviewPrep(false)} />
             <RejectionAnalysisModal job={job} isOpen={showRejectionAnalysis} onClose={() => setShowRejectionAnalysis(false)} />
             <NegotiationTipsModal job={job} isOpen={showNegotiation} onClose={() => setShowNegotiation(false)} />

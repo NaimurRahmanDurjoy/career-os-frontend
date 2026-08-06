@@ -29,7 +29,7 @@ export const useMatchCheckerStore = create((set) => ({
     generateCoverLetter: async (resumeId, jdText) => {
         set({ isGeneratingLetter: true, error: null, coverLetterCache: null });
         try {
-            const res = await apiClient.post('/ai-tools/cover-letter', {
+            const res = await apiClient.post('/ai-tools/stateless-cover-letter', {
                 resume_id: resumeId,
                 job_description: jdText
             });

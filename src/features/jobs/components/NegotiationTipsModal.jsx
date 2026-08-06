@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Banknote, Sparkles, Copy, CheckCircle2 } from 'lucide-react';
 import { useJobsStore } from '../store/useJobsStore';
 
@@ -42,7 +43,7 @@ export default function NegotiationTipsModal({ job, isOpen, onClose }) {
 
     if (!isOpen) return null;
 
-    return (
+    return createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
             <div className="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-2xl shadow-2xl relative z-10 flex flex-col max-h-[85vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
@@ -107,11 +108,11 @@ export default function NegotiationTipsModal({ job, isOpen, onClose }) {
                         </div>
                     ) : (
                         <div className="h-full flex flex-col items-center justify-center text-center py-8">
-                            <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 rounded-full flex items-center justify-center mb-6 border border-emerald-200 dark:border-emerald-800/50">
-                                <Banknote size={40} />
+                            <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 rounded-full flex items-center justify-center mb-5 border border-emerald-200 dark:border-emerald-800/50">
+                                <Banknote size={28} />
                             </div>
-                            <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-3 tracking-tight">Congratulations on the Offer!</h3>
-                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-8 max-w-md">
+                            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2 tracking-tight">Congratulations on the Interview!</h3>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-6 max-w-sm mx-auto">
                                 Don't leave money on the table. We will analyze your unique strengths against the job description to give you specific leverage points and a professional script to negotiate a better package.
                             </p>
                             <button
@@ -125,6 +126,7 @@ export default function NegotiationTipsModal({ job, isOpen, onClose }) {
                     )}
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

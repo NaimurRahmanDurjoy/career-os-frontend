@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, Copy, CheckCircle2, Download, Zap } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { X, Copy, CheckCircle2, Download, Zap, FileText } from 'lucide-react';
 import { useJobsStore } from '../store/useJobsStore';
 
 export default function CoverLetterModal({ job, isOpen, onClose }) {
@@ -17,8 +18,13 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
                 setCopied(false);
                 setError(null);
             }, 300);
+        } else {
+            // Load from DB if it exists
+            if (job.ai_match && job.ai_match.generated_cover_letter) {
+                setLetter(job.ai_match.generated_cover_letter);
+            }
         }
-    }, [isOpen]);
+    }, [isOpen, job]);
 
     const handleGenerate = async () => {
         if (!job.job_description) {
@@ -61,7 +67,7 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
 
     if (!isOpen) return null;
 
-    return (
+    return createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
             <div className="bg-white dark:bg-slate-900 w-full max-w-3xl h-[85vh] rounded-2xl shadow-2xl relative z-10 flex flex-col border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200">
@@ -143,6 +149,7 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
                     </div>
                 )}
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

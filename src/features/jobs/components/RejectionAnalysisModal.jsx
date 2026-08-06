@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, AlertCircle, ArrowUpCircle } from 'lucide-react';
 import { useJobsStore } from '../store/useJobsStore';
 
@@ -32,7 +33,7 @@ export default function RejectionAnalysisModal({ job, isOpen, onClose }) {
 
     if (!isOpen) return null;
 
-    return (
+    return createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
             <div className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl relative z-10 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
@@ -94,11 +95,11 @@ export default function RejectionAnalysisModal({ job, isOpen, onClose }) {
                         </div>
                     ) : (
                         <div className="h-full flex flex-col items-center justify-center text-center py-8">
-                            <div className="w-20 h-20 bg-rose-100 dark:bg-rose-900/30 text-rose-500 rounded-full flex items-center justify-center mb-6 border border-rose-200 dark:border-rose-800/50">
-                                <AlertCircle size={40} />
+                            <div className="w-16 h-16 bg-rose-100 dark:bg-rose-900/30 text-rose-500 rounded-full flex items-center justify-center mb-5 border border-rose-200 dark:border-rose-800/50">
+                                <AlertCircle size={28} />
                             </div>
-                            <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-3 tracking-tight">Discover Growth Opportunities</h3>
-                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-8 max-w-md">
+                            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2 tracking-tight">Discover Growth Opportunities</h3>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-6 max-w-sm mx-auto">
                                 Rejection is redirection. Let AI analyze your resume against this specific job's requirements to identify critical skills you might be missing, helping you refine your approach for the next application.
                             </p>
                             <button
@@ -112,6 +113,7 @@ export default function RejectionAnalysisModal({ job, isOpen, onClose }) {
                     )}
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
