@@ -31,23 +31,22 @@ export default function PreparationTrackerPage() {
     }
 
     return (
-        <div className="max-w-5xl mx-auto py-8 animate-fadeIn">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div className="md:px-8 max-w-[1600px] w-full mx-auto relative z-10 animate-fadeIn">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-5 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
                 <div>
-                    <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-3">
-                        <BookOpen size={32} className="text-emerald-500" />
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight transition-colors duration-300 flex items-center gap-3">
+                        <BookOpen size={28} className="text-emerald-500" />
                         Preparation Tracker
                     </h1>
-                    <p className="text-slate-500 font-medium mt-2">
+                    <p className="text-slate-500 dark:text-slate-400 font-medium text-sm mt-1 transition-colors duration-300">
                         Stay focused and track your readiness for major competency exams.
                     </p>
                 </div>
                 <button
                     onClick={() => setIsCreating(true)}
-                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-md shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-500/30 flex items-center justify-center gap-2 group self-start sm:self-center"
+                    className="mt-4 sm:mt-0 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-colors flex items-center gap-2 text-sm"
                 >
-                    <Plus size={18} className="group-hover:scale-110 transition-transform" />
-                    New Roadmap
+                    <span className="font-bold">+</span> New Roadmap
                 </button>
             </div>
 

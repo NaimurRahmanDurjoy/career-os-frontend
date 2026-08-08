@@ -11,6 +11,18 @@ export default function MainLayout({ children, activeView, setActiveView }) {
     const logout = useAuthStore((state) => state.logout);
     const { isDarkMode, toggleTheme } = useThemeStore();
 
+    const viewTitles = {
+        dashboard: 'Dashboard',
+        resume: 'Resume Analyzer',
+        jobs: 'Application CRM Dashboard',
+        'match-checker': 'Job Match Checker',
+        preparation: 'Prep Tracker',
+        'mock-tests': 'AI Mock Tests',
+        reminders: 'Reminders',
+        billing: 'Upgrade Plan',
+        profile: 'User Profile'
+    };
+
     return (
         <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
             <Sidebar
@@ -24,9 +36,7 @@ export default function MainLayout({ children, activeView, setActiveView }) {
                 <header className="h-20 sticky top-0 z-40 px-8 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 transition-colors duration-300">
                     <div className="flex items-center gap-4">
                         <h2 className="text-xl font-bold text-slate-800 dark:text-white shrink-0">
-                            {activeView === 'resume' ? 'Resume Analyzer' :
-                                activeView === 'profile' ? 'User Profile' :
-                                    activeView === 'billing' ? 'Upgrade Plan' : 'Application CRM Dashboard'}
+                            {viewTitles[activeView] || 'Career OS'}
                         </h2>
                         {user?.current_plan && (
                             <div className="hidden lg:flex items-center gap-2 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-full">

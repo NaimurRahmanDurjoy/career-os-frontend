@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useReminderStore } from '../store/useReminderStore';
-import { Plus, CheckCircle2, Trash2, Calendar, Clock, Briefcase } from 'lucide-react';
+import { Plus, CheckCircle2, Trash2, Calendar, Clock, Briefcase, Bell } from 'lucide-react';
 import AddReminderModal from './AddReminderModal';
 
 export default function ReminderList() {
@@ -30,18 +30,22 @@ export default function ReminderList() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto py-8">
-            <div className="flex justify-between items-end mb-8">
+        <div className="md:px-8 max-w-[1600px] w-full mx-auto relative z-10">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-5 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
                 <div>
-                    <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Mission Control</h1>
-                    <p className="text-slate-500 font-medium mt-1">Organize your job search schedule and upcoming deadlines.</p>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight transition-colors duration-300 flex items-center gap-3">
+                        <Bell size={28} className="text-blue-500" />
+                        Mission Control
+                    </h1>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium text-sm mt-1 transition-colors duration-300">
+                        Organize your job search schedule and upcoming deadlines.
+                    </p>
                 </div>
                 <button
                     onClick={() => setIsAddOpen(true)}
-                    className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-md hover:shadow-lg transition-all active:scale-95"
+                    className="mt-4 sm:mt-0 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-colors flex items-center gap-2 text-sm"
                 >
-                    <Plus size={18} />
-                    New Reminder
+                    <span className="font-bold">+</span> New Reminder
                 </button>
             </div>
 

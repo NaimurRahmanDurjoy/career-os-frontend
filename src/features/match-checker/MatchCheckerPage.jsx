@@ -49,15 +49,17 @@ export default function MatchCheckerPage() {
     };
 
     return (
-        <div className="max-w-5xl mx-auto py-8">
-            <div className="mb-8">
-                <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-3">
-                    <Target size={32} className="text-indigo-500" />
-                    CV vs JD Match Checker
-                </h1>
-                <p className="text-slate-500 font-medium mt-2">
-                    Paste a job description below to see how well it matches your resume before you decide to apply.
-                </p>
+        <div className="md:px-8 max-w-[1600px] w-full mx-auto relative z-10">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-5 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+                <div>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight transition-colors duration-300 flex items-center gap-3">
+                        <Target size={28} className="text-indigo-500" />
+                        CV vs JD Match Checker
+                    </h1>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium text-sm mt-1 transition-colors duration-300">
+                        Paste a job description below to see how well it matches your resume before you decide to apply.
+                    </p>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

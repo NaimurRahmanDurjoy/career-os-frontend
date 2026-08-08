@@ -56,10 +56,17 @@ export default function BillingDashboard() {
     if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-emerald-500 h-8 w-8" /></div>;
 
     return (
-        <div className="w-full max-w-[90rem] mx-auto py-8 lg:py-16 px-4 md:px-8 relative z-10">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-slate-400 tracking-tight">Upgrade to Career OS Pro</h1>
-                <p className="text-slate-500 mt-4 max-w-2xl mx-auto font-medium">Get unlimited access to AI Mock Tests, advanced resume parsing, and priority support.</p>
+        <div className="md:px-8 max-w-[1600px] w-full mx-auto relative z-10">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-5 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+                <div>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight transition-colors duration-300 flex items-center gap-3">
+                        <CreditCard size={28} className="text-indigo-500" />
+                        Upgrade to Career OS Pro
+                    </h1>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium text-sm mt-1 transition-colors duration-300">
+                        Get unlimited access to AI Mock Tests, advanced resume parsing, and priority support.
+                    </p>
+                </div>
             </div>
 
             {error && (

@@ -65,7 +65,7 @@ export default function MockTestDashboard() {
         const selectedOpt = isCompleted ? activeQuiz.user_answers[currentQuestionIndex] : answers[currentQuestionIndex];
 
         return (
-            <div className="max-w-3xl mx-auto py-8 animate-fadeIn">
+            <div className="md:px-8 max-w-[1600px] w-full mx-auto relative z-10 animate-fadeIn">
                 <button
                     onClick={() => setActiveQuiz(null)}
                     className="text-sm font-bold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 mb-6 flex items-center gap-1"
@@ -171,23 +171,22 @@ export default function MockTestDashboard() {
     }
 
     return (
-        <div className="max-w-5xl mx-auto py-8 animate-fadeIn">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div className="md:px-8 max-w-[1600px] w-full mx-auto relative z-10 animate-fadeIn">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-5 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
                 <div>
-                    <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-3">
-                        <Target size={32} className="text-indigo-500" />
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight transition-colors duration-300 flex items-center gap-3">
+                        <Target size={28} className="text-indigo-500" />
                         AI Mock Tests
                     </h1>
-                    <p className="text-slate-500 font-medium mt-2">
+                    <p className="text-slate-500 dark:text-slate-400 font-medium text-sm mt-1 transition-colors duration-300">
                         Generate technical quizzes dynamically on any topic to test your readiness.
                     </p>
                 </div>
                 <button
                     onClick={handleNewClick}
-                    className="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-xl transition-all shadow-md shadow-indigo-500/20 flex items-center justify-center gap-2 group self-start sm:self-center"
+                    className="mt-4 sm:mt-0 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl transition-colors flex items-center gap-2 text-sm"
                 >
-                    <Plus size={18} className="group-hover:scale-110 transition-transform" />
-                    New Mock Test
+                    <span className="font-bold">+</span> New Mock Test
                 </button>
             </div>
 
