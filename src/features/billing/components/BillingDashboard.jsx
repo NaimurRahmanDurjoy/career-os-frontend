@@ -56,7 +56,7 @@ export default function BillingDashboard() {
     if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-emerald-500 h-8 w-8" /></div>;
 
     return (
-        <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 relative z-10">
+        <div className="w-full max-w-[90rem] mx-auto py-8 lg:py-16 px-4 md:px-8 relative z-10">
             <div className="text-center mb-12">
                 <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-slate-400 tracking-tight">Upgrade to Career OS Pro</h1>
                 <p className="text-slate-500 mt-4 max-w-2xl mx-auto font-medium">Get unlimited access to AI Mock Tests, advanced resume parsing, and priority support.</p>
@@ -69,9 +69,9 @@ export default function BillingDashboard() {
                 </div>
             )}
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 xl:gap-8 w-full">
                 {plans.map(plan => (
-                    <div key={plan.id} className={`backdrop-blur-2xl border rounded-[2rem] p-8 relative shadow-2xl transition-all ${plan.popular ? 'bg-white/80 dark:bg-slate-900/60 border-emerald-500/50 shadow-emerald-900/20 md:-translate-y-2' : 'bg-white/50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-800 shadow-slate-900/5 hover:border-slate-300 dark:hover:border-slate-700'}`}>
+                    <div key={plan.id} className={`backdrop-blur-xl border rounded-[1.5rem] p-6 flex flex-col relative shadow-xl transition-all h-full ${plan.popular ? 'bg-white dark:bg-slate-900/80 border-emerald-500/50 ring-1 ring-emerald-500/50 shadow-emerald-900/20 xl:-translate-y-2' : 'bg-white/60 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800 shadow-slate-900/5 hover:border-slate-300 dark:hover:border-slate-700'}`}>
                         {plan.popular && (
                             <div className="absolute top-0 right-8 transform -translate-y-1/2">
                                 <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.3)] text-white text-xs font-bold uppercase tracking-widest py-1.5 px-4 rounded-full">Most Popular</span>
@@ -80,9 +80,9 @@ export default function BillingDashboard() {
 
                         <h3 className="text-3xl font-black text-slate-800 dark:text-white mb-2">{plan.name}</h3>
 
-                        <div className="flex items-baseline gap-2 mb-8">
-                            <span className="text-5xl font-black text-slate-900 dark:text-white">৳{plan.price_bdt}</span>
-                            <span className="text-slate-500 font-medium">/ 30 Days</span>
+                        <div className="flex items-baseline gap-1.5 mb-6">
+                            <span className="text-4xl xl:text-5xl font-black text-slate-900 dark:text-white">৳{plan.price_bdt}</span>
+                            <span className="text-xs xl:text-sm text-slate-500 font-medium">/ 30 Days</span>
                         </div>
 
                         <ul className="space-y-4 mb-8">
@@ -96,23 +96,23 @@ export default function BillingDashboard() {
                             ))}
                         </ul>
 
-                        <div className="space-y-4">
+                        <div className="space-y-3 mt-auto pt-6">
                             <button
                                 onClick={() => handleCheckout('sslcommerz', plan.id)}
                                 disabled={checkoutLoading}
-                                className="w-full relative group bg-emerald-50 hover:bg-emerald-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-emerald-900 dark:text-emerald-400 border border-emerald-200 dark:border-slate-700 font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-3 transition-colors text-sm"
+                                className={`w-full relative group font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs lg:text-sm ${plan.popular ? 'bg-emerald-50 hover:bg-emerald-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-emerald-900 dark:text-emerald-400 border border-emerald-200 dark:border-slate-700' : 'bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700'}`}
                             >
-                                {checkoutLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Wallet className="h-5 w-5 text-emerald-600 dark:text-emerald-500" />}
-                                Pay with bKash / Local Bank
+                                {checkoutLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wallet className={`h-4 w-4 ${plan.popular ? 'text-emerald-600 dark:text-emerald-500' : 'text-slate-500'}`} />}
+                                Pay via bKash/Local
                             </button>
 
                             <button
                                 onClick={() => handleCheckout('stripe', plan.id)}
                                 disabled={checkoutLoading}
-                                className="w-full relative group bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.3)] text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-3 transition-all text-sm border border-indigo-500"
+                                className={`w-full relative group font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition-all text-xs lg:text-sm border ${plan.popular ? 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 shadow-[0_0_10px_rgba(79,70,229,0.3)] text-white border-indigo-500' : 'bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'}`}
                             >
-                                {checkoutLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <CreditCard className="h-5 w-5 text-indigo-200" />}
-                                Pay securely with Stripe
+                                {checkoutLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4 opacity-70" />}
+                                Pay via Stripe/Card
                             </button>
                         </div>
                     </div>
