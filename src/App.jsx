@@ -16,6 +16,7 @@ import PreparationTrackerPage from './features/preparation/PreparationTrackerPag
 import MockTestDashboard from './features/mock-tests/MockTestDashboard';
 import DashboardPage from './features/dashboard/DashboardPage';
 import MainLayout from './components/layout/MainLayout';
+import AdminApp from './features/admin/AdminApp';
 import { Loader2 } from 'lucide-react';
 import { useThemeStore } from './store/useThemeStore.js';
 
@@ -41,6 +42,10 @@ export default function App() {
 
   if (window.location.pathname.startsWith('/oauth/callback')) {
     return <OAuthCallback onComplete={() => initializeAuth()} />;
+  }
+
+  if (window.location.pathname.startsWith('/admin')) {
+    return <AdminApp />;
   }
 
   if (isAuthLoading) {
