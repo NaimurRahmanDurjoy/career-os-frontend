@@ -62,20 +62,24 @@ export default function Sidebar({ activeView, setActiveView, user, logout }) {
             </nav>
 
             {/* User Account / Footer */}
-            <div className="p-5 border-t border-slate-200 dark:border-slate-800">
-                <div className="flex items-center justify-between mb-4">
-                    <div className="overflow-hidden">
-                        <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">{user?.name || 'Account'}</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user?.email}</p>
+            <div className="p-3 mx-4 mb-4 mt-auto rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 relative group overflow-hidden transition-colors hover:border-slate-300 dark:hover:border-slate-700">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/5 to-indigo-500/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-inner">
+                        {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
                     </div>
+                    <div className="flex-1 overflow-hidden">
+                        <p className="text-sm font-bold text-slate-800 dark:text-slate-200 truncate leading-tight">{user?.name || 'Account'}</p>
+                        <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate mt-0.5">{user?.email}</p>
+                    </div>
+                    <button
+                        onClick={logout}
+                        title="Sign Out"
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors shrink-0"
+                    >
+                        <LogOut size={16} />
+                    </button>
                 </div>
-                <button
-                    onClick={logout}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 hover:bg-rose-50 dark:hover:bg-rose-500/10 text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 border border-slate-200 dark:border-slate-800 hover:border-rose-200 dark:hover:border-rose-500/30 rounded-lg transition-colors text-sm font-semibold"
-                >
-                    <LogOut size={16} />
-                    <span>Sign Out</span>
-                </button>
             </div>
         </aside>
     );
