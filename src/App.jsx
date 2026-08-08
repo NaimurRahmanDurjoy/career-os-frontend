@@ -17,6 +17,7 @@ import MockTestDashboard from './features/mock-tests/MockTestDashboard';
 import DashboardPage from './features/dashboard/DashboardPage';
 import MainLayout from './components/layout/MainLayout';
 import AdminApp from './features/admin/AdminApp';
+import BillingDashboard from './features/billing/components/BillingDashboard';
 import { Loader2 } from 'lucide-react';
 import { useThemeStore } from './store/useThemeStore.js';
 
@@ -122,6 +123,10 @@ export default function App() {
 
       {activeView === 'profile' && (
         <Profile />
+      )}
+
+      {activeView === 'billing' && (
+        <BillingDashboard />
       )}
     </MainLayout>
   );

@@ -9,7 +9,8 @@ import {
     Bell,
     Target,
     BookOpen,
-    BrainCircuit
+    BrainCircuit,
+    CreditCard
 } from 'lucide-react';
 
 export default function Sidebar({ activeView, setActiveView, user, logout }) {
@@ -20,7 +21,8 @@ export default function Sidebar({ activeView, setActiveView, user, logout }) {
         { id: 'match-checker', label: 'Job Match Checker', icon: Target },
         { id: 'preparation', label: 'Prep Tracker', icon: BookOpen },
         { id: 'mock-tests', label: 'AI Mock Tests', icon: BrainCircuit },
-        { id: 'reminders', label: 'Reminders', icon: Bell }
+        { id: 'reminders', label: 'Reminders', icon: Bell },
+        { id: 'billing', label: 'Billing & Plans', icon: CreditCard }
     ];
 
     return (
