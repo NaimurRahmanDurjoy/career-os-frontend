@@ -13,6 +13,7 @@ export default function AdminPlans({ onLogout }) {
         price_bdt: 0,
         price_usd: 0,
         features: '',
+        limits: { mock_tests: 1, resumes: 1, ai_tools: 1, job_match: false },
         is_popular: false,
         is_active: true
     });
@@ -41,7 +42,7 @@ export default function AdminPlans({ onLogout }) {
 
     const openNewPlan = () => {
         setEditingPlan(null);
-        setForm({ identifier: '', name: '', price_bdt: 0, price_usd: 0, features: '', is_popular: false, is_active: true });
+        setForm({ identifier: '', name: '', price_bdt: 0, price_usd: 0, features: '', limits: { mock_tests: 1, resumes: 1, ai_tools: 1, job_match: false }, is_popular: false, is_active: true });
         setShowModal(true);
     };
 
@@ -53,6 +54,7 @@ export default function AdminPlans({ onLogout }) {
             price_bdt: plan.price_bdt,
             price_usd: plan.price_usd,
             features: (plan.features || []).join('\n'), // convert array to newline string
+            limits: plan.limits || { mock_tests: 1, resumes: 1, ai_tools: 1, job_match: false },
             is_popular: plan.is_popular,
             is_active: plan.is_active
         });
@@ -196,6 +198,28 @@ export default function AdminPlans({ onLogout }) {
                                 <div>
                                     <label className="block text-sm text-slate-400 mb-1">Features (One per line)</label>
                                     <textarea rows={4} value={form.features} onChange={e => setForm({ ...form, features: e.target.value })} className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white outline-none focus:border-emerald-500 text-sm leading-relaxed" placeholder="Unlimited Mock Tests&#10;Priority Support" />
+                                </div>
+
+                                <div>
+                                    <h4 className="text-sm font-bold text-white mb-3 mt-2 border-t border-slate-800 pt-4">Hard Limits (Backend Gating)</h4>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-xs text-slate-400 mb-1">Max Resumes</label>
+                                            <input required type="number" value={form.limits.resumes} onChange={e => setForm({ ...form, limits: { ...form.limits, resumes: parseInt(e.target.value) } })} className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none focus:border-emerald-500 text-sm" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs text-slate-400 mb-1">Max Mock Tests</label>
+                                            <input required type="number" value={form.limits.mock_tests} onChange={e => setForm({ ...form, limits: { ...form.limits, mock_tests: parseInt(e.target.value) } })} className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none focus:border-emerald-500 text-sm" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs text-slate-400 mb-1">Max AI Tool Usages</label>
+                                            <input required type="number" value={form.limits.ai_tools} onChange={e => setForm({ ...form, limits: { ...form.limits, ai_tools: parseInt(e.target.value) } })} className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none focus:border-emerald-500 text-sm" />
+                                        </div>
+                                    </div>
+                                    <label className="flex items-center gap-2 text-white cursor-pointer group mt-4">
+                                        <input type="checkbox" checked={form.limits.job_match} onChange={e => setForm({ ...form, limits: { ...form.limits, job_match: e.target.checked } })} className="w-4 h-4 rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-emerald-500" />
+                                        <span className="text-sm font-medium group-hover:text-emerald-400 transition-colors">Has Access to "Job Match Checker"</span>
+                                    </label>
                                 </div>
 
                                 <div className="flex gap-6 pt-2">

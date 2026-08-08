@@ -39,6 +39,10 @@ export default function App() {
     if (!window.location.pathname.startsWith('/oauth/callback')) {
       initializeAuth();
     }
+
+    const handleViewChange = (e) => setActiveView(e.detail);
+    window.addEventListener('changeView', handleViewChange);
+    return () => window.removeEventListener('changeView', handleViewChange);
   }, [initializeAuth]);
 
   if (window.location.pathname.startsWith('/oauth/callback')) {

@@ -5,15 +5,27 @@ import InterviewPrepPanel from './InterviewPrepPanel';
 import RejectionAnalysisModal from './RejectionAnalysisModal';
 import NegotiationTipsModal from './NegotiationTipsModal';
 import CoverLetterModal from './CoverLetterModal';
+import { useAuthStore } from '../../auth/store/useAuthStore';
+import PaywallModal from '../../../components/common/PaywallModal';
 
 export default function JobCard({ job, onOpenNotes }) {
+    const { user } = useAuthStore();
     const { deleteJob, updateJobStatus } = useJobsStore();
     const [showInterviewPrep, setShowInterviewPrep] = useState(false);
     const [showRejectionAnalysis, setShowRejectionAnalysis] = useState(false);
     const [showNegotiation, setShowNegotiation] = useState(false);
     const [showCoverLetter, setShowCoverLetter] = useState(false);
+    const [showPaywall, setShowPaywall] = useState(false);
 
     const statuses = ['applied', 'shortlisted', 'interview', 'offer', 'rejected'];
+
+    const handleAiFeatureClick = (callback) => {
+        if ((user?.usage?.ai_tools || 0) >= (user?.limits?.ai_tools || 0)) {
+            setShowPaywall(true);
+        } else {
+            callback();
+        }
+    };
 
     const handleDragStart = (e) => {
         e.dataTransfer.setData('jobId', job.id);
@@ -74,14 +86,14 @@ export default function JobCard({ job, onOpenNotes }) {
 
             <div className="relative z-10 mt-1 flex flex-wrap gap-2">
                 <button
-                    onClick={() => setShowCoverLetter(true)}
+                    onClick={() => handleAiFeatureClick(() => setShowCoverLetter(true))}
                     title="Generate Custom Cover Letter"
                     className="flex items-center text-[10px] uppercase font-bold text-slate-500 hover:text-indigo-600 bg-slate-100 hover:bg-indigo-50 dark:bg-slate-800/50 dark:hover:bg-indigo-900/40 px-2 py-1 rounded border border-slate-200 dark:border-slate-700/50 hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors mt-2"
                 >
                     <FileText size={11} className="mr-1" /> Cover Letter
                 </button>
                 <button
-                    onClick={() => setShowInterviewPrep(true)}
+                    onClick={() => handleAiFeatureClick(() => setShowInterviewPrep(true))}
                     title="AI Interview Simulator"
                     className="flex items-center text-[10px] uppercase font-bold text-slate-500 hover:text-purple-600 bg-slate-100 hover:bg-purple-50 dark:bg-slate-800/50 dark:hover:bg-purple-900/40 px-2 py-1 rounded border border-slate-200 dark:border-slate-700/50 hover:border-purple-300 dark:hover:border-purple-700 transition-colors mt-2"
                 >
@@ -89,7 +101,7 @@ export default function JobCard({ job, onOpenNotes }) {
                 </button>
                 {job.status === 'rejected' && (
                     <button
-                        onClick={() => setShowRejectionAnalysis(true)}
+                        onClick={() => handleAiFeatureClick(() => setShowRejectionAnalysis(true))}
                         title="AI Rejection Insights"
                         className="flex items-center text-[10px] uppercase font-bold text-slate-500 hover:text-rose-600 bg-slate-100 hover:bg-rose-50 dark:bg-slate-800/50 dark:hover:bg-rose-900/40 px-2 py-1 rounded border border-slate-200 dark:border-slate-700/50 hover:border-rose-300 dark:hover:border-rose-700 transition-colors mt-2"
                     >
@@ -98,7 +110,7 @@ export default function JobCard({ job, onOpenNotes }) {
                 )}
                 {job.status === 'interview' && (
                     <button
-                        onClick={() => setShowNegotiation(true)}
+                        onClick={() => handleAiFeatureClick(() => setShowNegotiation(true))}
                         title="Salary Negotiation Tips"
                         className="flex items-center text-[10px] uppercase font-bold text-slate-500 hover:text-emerald-600 bg-slate-100 hover:bg-emerald-50 dark:bg-slate-800/50 dark:hover:bg-emerald-900/40 px-2 py-1 rounded border border-slate-200 dark:border-slate-700/50 hover:border-emerald-300 dark:hover:border-emerald-700 transition-colors mt-2"
                     >
@@ -124,6 +136,12 @@ export default function JobCard({ job, onOpenNotes }) {
                     ))}
                 </select>
             </div>
+            <PaywallModal
+                isOpen={showPaywall}
+                onClose={() => setShowPaywall(false)}
+                onUpgrade={() => window.dispatchEvent(new CustomEvent('changeView', { detail: 'billing' }))}
+                featureName="Advanced AI Tools"
+            />
         </div>
     );
 }

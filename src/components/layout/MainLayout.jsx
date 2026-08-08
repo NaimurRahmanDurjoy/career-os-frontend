@@ -23,10 +23,24 @@ export default function MainLayout({ children, activeView, setActiveView }) {
             <main className="flex-1 ml-64 min-w-0 min-h-screen flex flex-col relative">
                 <header className="h-20 sticky top-0 z-40 px-8 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 transition-colors duration-300">
                     <div className="flex items-center gap-4">
-                        <h2 className="text-xl font-bold text-slate-800 dark:text-white">
+                        <h2 className="text-xl font-bold text-slate-800 dark:text-white shrink-0">
                             {activeView === 'resume' ? 'Resume Analyzer' :
-                                activeView === 'profile' ? 'User Profile' : 'Application CRM Dashboard'}
+                                activeView === 'profile' ? 'User Profile' :
+                                    activeView === 'billing' ? 'Upgrade Plan' : 'Application CRM Dashboard'}
                         </h2>
+                        {user?.current_plan && (
+                            <div className="hidden lg:flex items-center gap-2 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-full">
+                                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-[pulse_2s_ease-in-out_infinite]"></div>
+                                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                                    {user.current_plan.name}
+                                </span>
+                                {user.current_plan.days_remaining !== null && (
+                                    <span className="text-[10px] font-semibold bg-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)] text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full ml-1">
+                                        {user.current_plan.days_remaining}d left
+                                    </span>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex items-center gap-4">

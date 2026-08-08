@@ -5,7 +5,7 @@ import AddJobModal from './components/AddJobModal';
 import NotesDrawer from './components/NotesDrawer';
 
 export default function JobsDashboard() {
-    const { fetchJobs, loading } = useJobsStore();
+    const { fetchJobs, loading, jobs } = useJobsStore();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [selectedJobForNotes, setSelectedJobForNotes] = useState(null);
 

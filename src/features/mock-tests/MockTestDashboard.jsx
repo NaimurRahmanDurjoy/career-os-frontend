@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Target, Plus, RefreshCw, Trash2, CheckCircle2, XCircle, BrainCircuit, ArrowRight, Play, Award } from 'lucide-react';
 import { useMockTestStore } from './store/useMockTestStore';
+import { useAuthStore } from '../../features/auth/store/useAuthStore';
+import PaywallModal from '../../components/common/PaywallModal';
 
 export default function MockTestDashboard() {
     const { tests, fetchTests, generateTest, submitTest, deleteTest, loading, generating } = useMockTestStore();
@@ -9,6 +11,17 @@ export default function MockTestDashboard() {
     const [activeQuiz, setActiveQuiz] = useState(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState({});
+
+    const { user } = useAuthStore();
+    const [showPaywall, setShowPaywall] = useState(false);
+
+    const handleNewClick = () => {
+        if ((user?.usage?.mock_tests || 0) >= (user?.limits?.mock_tests || 0)) {
+            setShowPaywall(true);
+        } else {
+            setIsCreating(true);
+        }
+    };
 
     useEffect(() => {
         fetchTests();
@@ -170,7 +183,7 @@ export default function MockTestDashboard() {
                     </p>
                 </div>
                 <button
-                    onClick={() => setIsCreating(true)}
+                    onClick={handleNewClick}
                     className="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-xl transition-all shadow-md shadow-indigo-500/20 flex items-center justify-center gap-2 group self-start sm:self-center"
                 >
                     <Plus size={18} className="group-hover:scale-110 transition-transform" />
@@ -241,8 +254,8 @@ export default function MockTestDashboard() {
                                 <button
                                     onClick={() => startQuiz(test)}
                                     className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${isCompleted
-                                            ? 'bg-slate-100 hover:bg-slate-200 text-slate-500 dark:bg-slate-800 dark:hover:bg-slate-700'
-                                            : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
+                                        ? 'bg-slate-100 hover:bg-slate-200 text-slate-500 dark:bg-slate-800 dark:hover:bg-slate-700'
+                                        : 'bg-indigo-500 hover:bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
                                         }`}
                                     title={isCompleted ? "Review Test" : "Start Test"}
                                 >
@@ -262,13 +275,20 @@ export default function MockTestDashboard() {
                         Before your real interview, generate an AI mock quiz on specific technical topics to see where you stand.
                     </p>
                     <button
-                        onClick={() => setIsCreating(true)}
+                        onClick={handleNewClick}
                         className="px-6 py-3 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors"
                     >
                         Generate First Test
                     </button>
                 </div>
             )}
+
+            <PaywallModal
+                isOpen={showPaywall}
+                onClose={() => setShowPaywall(false)}
+                onUpgrade={() => window.dispatchEvent(new CustomEvent('changeView', { detail: 'billing' }))}
+                featureName="AI Mock Tests"
+            />
         </div>
     );
 }
