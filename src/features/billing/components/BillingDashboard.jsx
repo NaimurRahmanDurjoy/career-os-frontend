@@ -69,12 +69,14 @@ export default function BillingDashboard() {
                 </div>
             )}
 
-            <div className="grid md:grid-cols-1 gap-8 max-w-lg mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 {plans.map(plan => (
-                    <div key={plan.id} className="bg-white/80 dark:bg-slate-900/50 backdrop-blur-2xl border border-emerald-500/30 rounded-[2rem] p-8 relative shadow-2xl shadow-emerald-900/10">
-                        <div className="absolute top-0 right-8 transform -translate-y-1/2">
-                            <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.3)] text-white text-xs font-bold uppercase tracking-widest py-1.5 px-4 rounded-full">Most Popular</span>
-                        </div>
+                    <div key={plan.id} className={`backdrop-blur-2xl border rounded-[2rem] p-8 relative shadow-2xl transition-all ${plan.popular ? 'bg-white/80 dark:bg-slate-900/60 border-emerald-500/50 shadow-emerald-900/20 md:-translate-y-2' : 'bg-white/50 dark:bg-slate-900/30 border-slate-200 dark:border-slate-800 shadow-slate-900/5 hover:border-slate-300 dark:hover:border-slate-700'}`}>
+                        {plan.popular && (
+                            <div className="absolute top-0 right-8 transform -translate-y-1/2">
+                                <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.3)] text-white text-xs font-bold uppercase tracking-widest py-1.5 px-4 rounded-full">Most Popular</span>
+                            </div>
+                        )}
 
                         <h3 className="text-3xl font-black text-slate-800 dark:text-white mb-2">{plan.name}</h3>
 
