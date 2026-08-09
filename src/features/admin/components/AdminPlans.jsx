@@ -13,7 +13,7 @@ export default function AdminPlans({ onLogout }) {
         price_bdt: 0,
         price_usd: 0,
         features: '',
-        limits: { mock_tests: 1, resumes: 1, ai_tools: 1, job_match: false },
+        limits: { mock_tests: 1, resumes: 1, ai_tools: 1, job_match: false, jobs: 10 },
         is_popular: false,
         is_active: true
     });
@@ -42,7 +42,7 @@ export default function AdminPlans({ onLogout }) {
 
     const openNewPlan = () => {
         setEditingPlan(null);
-        setForm({ identifier: '', name: '', price_bdt: 0, price_usd: 0, features: '', limits: { mock_tests: 1, resumes: 1, ai_tools: 1, job_match: false }, is_popular: false, is_active: true });
+        setForm({ identifier: '', name: '', price_bdt: 0, price_usd: 0, features: '', limits: { mock_tests: 1, resumes: 1, ai_tools: 1, job_match: false, jobs: 10 }, is_popular: false, is_active: true });
         setShowModal(true);
     };
 
@@ -54,7 +54,7 @@ export default function AdminPlans({ onLogout }) {
             price_bdt: plan.price_bdt,
             price_usd: plan.price_usd,
             features: (plan.features || []).join('\n'), // convert array to newline string
-            limits: plan.limits || { mock_tests: 1, resumes: 1, ai_tools: 1, job_match: false },
+            limits: { mock_tests: 1, resumes: 1, ai_tools: 1, job_match: false, jobs: 10, ...(plan.limits || {}) },
             is_popular: plan.is_popular,
             is_active: plan.is_active
         });
@@ -214,6 +214,10 @@ export default function AdminPlans({ onLogout }) {
                                         <div>
                                             <label className="block text-xs text-slate-400 mb-1">Max AI Tool Usages</label>
                                             <input required type="number" value={form.limits.ai_tools} onChange={e => setForm({ ...form, limits: { ...form.limits, ai_tools: parseInt(e.target.value) } })} className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none focus:border-emerald-500 text-sm" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs text-slate-400 mb-1">Max Job Trackers</label>
+                                            <input required type="number" value={form.limits.jobs ?? 10} onChange={e => setForm({ ...form, limits: { ...form.limits, jobs: parseInt(e.target.value) } })} className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white outline-none focus:border-emerald-500 text-sm" />
                                         </div>
                                     </div>
                                     <label className="flex items-center gap-2 text-white cursor-pointer group mt-4">

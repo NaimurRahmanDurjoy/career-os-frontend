@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Target, Zap, AlertCircle, RefreshCw, FileText, Copy, CheckCircle2 } from 'lucide-react';
 import { useMatchCheckerStore } from './store/useMatchCheckerStore';
 import { useResumeStore } from '../resumes/store/useResumeStore';
+import { useAuthStore } from '../auth/store/useAuthStore';
+import PaywallModal from '../../components/common/PaywallModal';
 
 export default function MatchCheckerPage() {
     const { evaluationCache, coverLetterCache, isEvaluating, isGeneratingLetter, error, evaluateMatch, generateCoverLetter, clearEvaluation } = useMatchCheckerStore();
     const { resumes, fetchResumes } = useResumeStore();
+    const user = useAuthStore((state) => state.user);
 
     const [copiedLetter, setCopiedLetter] = useState(false);
+    const [isPaywallOpen, setIsPaywallOpen] = useState(false);
 
     const [selectedResumeId, setSelectedResumeId] = useState('');
     const [jobDescription, setJobDescription] = useState('');
@@ -25,8 +29,21 @@ export default function MatchCheckerPage() {
     }, [resumes, selectedResumeId]);
 
     const handleCheck = async () => {
+        if (user && !user.limits?.job_match) {
+            setIsPaywallOpen(true);
+            return;
+        }
         if (!selectedResumeId || !jobDescription.trim()) return;
         await evaluateMatch(selectedResumeId, jobDescription);
+    };
+
+    const handleGenerateCoverLetterClick = async () => {
+        if (user && !user.limits?.job_match) {
+            setIsPaywallOpen(true);
+            return;
+        }
+        if (!selectedResumeId || !jobDescription.trim()) return;
+        await generateCoverLetter(selectedResumeId, jobDescription);
     };
 
     const handleClear = () => {
@@ -113,7 +130,7 @@ export default function MatchCheckerPage() {
                         </div>
 
                         <button
-                            onClick={() => generateCoverLetter(selectedResumeId, jobDescription)}
+                            onClick={handleGenerateCoverLetterClick}
                             disabled={isGeneratingLetter || !selectedResumeId || !jobDescription.trim()}
                             className="w-full py-3 bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-bold rounded-xl transition-all border border-slate-200 dark:border-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700/50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm"
                         >
@@ -232,6 +249,12 @@ export default function MatchCheckerPage() {
                     )}
                 </div>
             </div>
+            <PaywallModal
+                isOpen={isPaywallOpen}
+                onClose={() => setIsPaywallOpen(false)}
+                onUpgrade={() => window.dispatchEvent(new CustomEvent('changeView', { detail: 'billing' }))}
+                featureName="Job Match Checker"
+            />
         </div>
     );
 }

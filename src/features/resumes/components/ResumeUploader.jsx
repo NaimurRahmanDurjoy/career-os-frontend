@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { useResumeStore } from '../store/useResumeStore';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { UploadCloud, FileText, Loader2, AlertTriangle } from 'lucide-react';
+import PaywallModal from '../../../components/common/PaywallModal';
 
 export default function ResumeUploader() {
   // Selective store extraction to intercept rendering noise
@@ -8,6 +10,9 @@ export default function ResumeUploader() {
   const isProcessing = useResumeStore((state) => state.isProcessing);
   const networkError = useResumeStore((state) => state.networkError);
   const validationError = useResumeStore((state) => state.validationError);
+
+  const user = useAuthStore((state) => state.user);
+  const [isPaywallOpen, setIsPaywallOpen] = useState(false);
 
   const fileInputRef = useRef(null);
   const [localFileError, setLocalFileError] = useState('');
@@ -20,6 +25,11 @@ export default function ResumeUploader() {
     setLocalFileError('');
 
     if (!file) return;
+
+    if (user && user.usage && user.limits && user.usage.resumes >= user.limits.resumes) {
+      setIsPaywallOpen(true);
+      return;
+    }
 
     // Enforce localized client-side file format guard rules
     const allowedExtensions = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
@@ -125,6 +135,12 @@ export default function ResumeUploader() {
           </div>
         )}
       </div>
+      <PaywallModal
+        isOpen={isPaywallOpen}
+        onClose={() => setIsPaywallOpen(false)}
+        onUpgrade={() => window.dispatchEvent(new CustomEvent('changeView', { detail: 'billing' }))}
+        featureName="Resume Analyzer"
+      />
     </div>
   );
 }
