@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Users, CheckSquare, Loader2, DollarSign, Activity, CreditCard } from 'lucide-react';
+import { Users, CheckSquare, Loader2, DollarSign, Activity, CreditCard, TrendingUp, BarChart3 } from 'lucide-react';
+import {
+    AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+    BarChart, Bar, Legend
+} from 'recharts';
 
 export default function AdminDashboard({ onLogout }) {
     const [metrics, setMetrics] = useState(null);
@@ -44,6 +48,7 @@ export default function AdminDashboard({ onLogout }) {
                 </div>
             ) : metrics ? (
                 <div className="space-y-8">
+                    {/* Top KPI Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-sm hover:border-slate-700 transition-colors">
                             <div className="flex items-start justify-between mb-4">
@@ -51,7 +56,7 @@ export default function AdminDashboard({ onLogout }) {
                                     <DollarSign className="h-5 w-5 text-emerald-500" />
                                 </div>
                             </div>
-                            <p className="text-sm font-medium text-slate-400 tracking-wide uppercase">Revenue</p>
+                            <p className="text-sm font-medium text-slate-400 tracking-wide uppercase">Total Revenue</p>
                             <div className="mt-2 flex items-baseline gap-2">
                                 <h3 className="text-2xl font-bold text-white">৳{metrics.revenue_bdt || 0}</h3>
                                 <span className="text-sm text-slate-500">/ ${metrics.revenue_usd || 0}</span>
@@ -88,18 +93,76 @@ export default function AdminDashboard({ onLogout }) {
                                     <CheckSquare className="h-5 w-5 text-amber-500" />
                                 </div>
                             </div>
-                            <p className="text-sm font-medium text-slate-400 tracking-wide uppercase">Mock Tests Taken</p>
+                            <p className="text-sm font-medium text-slate-400 tracking-wide uppercase">Total Mocks Tests</p>
                             <div className="mt-2 flex items-baseline gap-2">
                                 <h3 className="text-2xl font-bold text-white">{metrics.total_mock_tests}</h3>
                             </div>
                         </div>
                     </div>
 
+                    {/* Charts Section */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {/* Revenue Area Chart */}
+                        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                    <TrendingUp className="h-5 w-5 text-emerald-500" />
+                                    Revenue Over Time (30 Days)
+                                </h3>
+                            </div>
+                            <div className="h-[300px] w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={metrics.chart_data || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                        <defs>
+                                            <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                                                <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                                        <XAxis dataKey="date" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                                        <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `৳${val}`} />
+                                        <Tooltip
+                                            contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', borderRadius: '8px' }}
+                                            itemStyle={{ color: '#10b981' }}
+                                        />
+                                        <Area type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+
+                        {/* AI Usage Bar Chart */}
+                        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                    <BarChart3 className="h-5 w-5 text-blue-500" />
+                                    AI Consumption (30 Days)
+                                </h3>
+                            </div>
+                            <div className="h-[300px] w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={metrics.chart_data || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                                        <XAxis dataKey="date" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                                        <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                                        <Tooltip
+                                            contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', borderRadius: '8px' }}
+                                            cursor={{ fill: '#1e293b' }}
+                                        />
+                                        <Bar dataKey="ai_tests" name="Mock Tests" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={20} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Transactions Table */}
                     <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
                         <div className="p-6 border-b border-slate-800 flex items-center justify-between">
                             <h3 className="text-lg font-bold text-white flex items-center gap-2">
                                 <CreditCard className="h-5 w-5 text-slate-400" />
-                                Recent Transactions
+                                Recent Network Transactions
                             </h3>
                         </div>
                         <div className="overflow-x-auto">
