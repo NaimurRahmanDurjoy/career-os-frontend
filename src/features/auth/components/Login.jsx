@@ -4,7 +4,7 @@ import { loginSchema } from '../validations/authValidation';
 import { Mail, Lock, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
 import { FcGoogle } from "react-icons/fc";
 
-export default function Login({ onSwitchToRegister }) {
+export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) {
   // Select only the exact slice required to prevent unnecessary re-renders
   const login = useAuthStore((state) => state.login);
 
@@ -130,6 +130,15 @@ export default function Login({ onSwitchToRegister }) {
             {fieldErrors.password && (
               <p className="text-red-500 dark:text-red-400 text-xs mt-1.5 font-medium pl-1">{fieldErrors.password}</p>
             )}
+            <div className="flex justify-end pt-1 pr-1">
+              <button
+                type="button"
+                onClick={onSwitchToForgotPassword}
+                className="text-[11px] font-bold text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
+              >
+                Forgot password?
+              </button>
+            </div>
           </div>
 
           <button

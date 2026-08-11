@@ -70,14 +70,32 @@ export const authApi = {
     return response.data;
   },
 
-  /**
-   * Updates the current user's password payload
-   */
   async updatePassword(currentPassword, newPassword, newPasswordConfirmation) {
     const response = await apiClient.put('/user/password', {
       current_password: currentPassword,
       password: newPassword,
       password_confirmation: newPasswordConfirmation
+    });
+    return response.data;
+  },
+
+  /**
+   * Triggers a password reset link to be sent to the given email
+   */
+  async forgotPassword(email) {
+    const response = await apiClient.post('/forgot-password', { email });
+    return response.data;
+  },
+
+  /**
+   * Resets the user's password using the token sent to their email
+   */
+  async resetPassword(token, email, password, passwordConfirmation) {
+    const response = await apiClient.post('/reset-password', {
+      token,
+      email,
+      password,
+      password_confirmation: passwordConfirmation
     });
     return response.data;
   }

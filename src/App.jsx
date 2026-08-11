@@ -4,6 +4,8 @@ import { useResumeStore } from './features/resumes/store/useResumeStore.js';
 import Login from './features/auth/components/Login';
 import Register from './features/auth/components/Register';
 import OAuthCallback from './features/auth/components/OAuthCallback';
+import ForgotPassword from './features/auth/components/ForgotPassword';
+import ResetPassword from './features/auth/components/ResetPassword';
 import Profile from './features/auth/components/Profile';
 import ResumeUploader from './features/resumes/components/ResumeUploader';
 import AnalysisDashboard from './features/resumes/components/AnalysisDashboard';
@@ -49,6 +51,12 @@ export default function App() {
     return <OAuthCallback onComplete={() => initializeAuth()} />;
   }
 
+  if (window.location.pathname.startsWith('/reset-password')) {
+    return <ResetPassword onSwitchToLogin={() => {
+      window.location.href = '/login';
+    }} />;
+  }
+
   if (window.location.pathname.startsWith('/admin')) {
     return <AdminApp />;
   }
@@ -68,7 +76,13 @@ export default function App() {
     if (authView === 'register') {
       return <Register onSwitchToLogin={() => setAuthView('login')} />;
     }
-    return <Login onSwitchToRegister={() => setAuthView('register')} />;
+    if (authView === 'forgot-password') {
+      return <ForgotPassword onSwitchToLogin={() => setAuthView('login')} />;
+    }
+    return <Login
+      onSwitchToRegister={() => setAuthView('register')}
+      onSwitchToForgotPassword={() => setAuthView('forgot-password')}
+    />;
   }
 
   return (
