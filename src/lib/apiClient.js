@@ -22,9 +22,9 @@ apiClient.interceptors.response.use(
     // Intercepts structural 401 errors caused by invalid or expired server-side tokens
     if (error.response && error.response.status === 401) {
 
-      // 🛡️ SAFE GUARD: রিকোয়েস্টটি যদি কারেন্ট ইউজার ভেরিফিকেশনের (/user) জন্য হয়ে থাকে, 
-      // এবং টোকেন ব্রাউজারে অলরেডি থাকে, তবে রিলোড টাইমিং কনফ্লিক্টের কারণে টোকেন ডিলিট করা যাবে না।
-      if (error.config.url.includes('/user')) {
+      // 🛡️ SAFE GUARD: Allow explicit authentication checks (`/user`) and the actual login route
+      // to resolve locally instead of a hard redirect.
+      if (error.config.url.includes('/user') || error.config.url.includes('/login')) {
         return Promise.reject(error);
       }
 
@@ -42,11 +42,15 @@ apiClient.interceptors.response.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Intercepts structural 401 errors caused by invalid or expired server-side tokens
-    if (error.response && error.response.status === 401) {
+    // Intercepts 403 rejections that carry the required_logout flag for suspended users
+    if (error.response && error.response.status === 403 && error.response.data?.require_logout) {
       localStorage.removeItem('token');
 
-      // Forces a soft reload or window redirect to purge stale runtime states cleanly
+      if (error.config.url.includes('/login')) {
+        return Promise.reject(error);
+      }
+
+      sessionStorage.setItem('auth_error', error.response.data.message || 'Your account has been suspended by an administrator.');
       window.location.href = '/login';
     }
     return Promise.reject(error);

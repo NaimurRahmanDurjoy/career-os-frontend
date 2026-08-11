@@ -10,7 +10,17 @@ export default function Login({ onSwitchToRegister }) {
 
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [fieldErrors, setFieldErrors] = useState({});
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState(() => {
+    return sessionStorage.getItem('auth_error') || '';
+  });
+
+  // Clean up session storage safely outside of the initializer to survive React Strict Mode
+  React.useEffect(() => {
+    if (serverError) {
+      sessionStorage.removeItem('auth_error');
+    }
+  }, [serverError]);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {

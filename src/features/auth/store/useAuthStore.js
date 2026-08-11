@@ -39,17 +39,15 @@ export const useAuthStore = create((set) => ({
    * Dispatches explicit input criteria to trigger system credential verification
    */
   login: async (email, password) => {
-    set({ loading: true });
     try {
       const { user, access_token } = await authApi.login(email, password);
 
       localStorage.setItem('token', access_token);
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
-      set({ user, token: access_token, loading: false });
+      set({ user, token: access_token });
       return { success: true };
     } catch (error) {
-      set({ loading: false });
       throw error;
     }
   },
@@ -58,7 +56,6 @@ export const useAuthStore = create((set) => ({
    * Propagates credential structures to register a unique profile account
    */
   register: async (name, email, password, passwordConfirmation) => {
-    set({ loading: true });
     try {
       const { user, access_token } = await authApi.register(
         name,
@@ -70,10 +67,9 @@ export const useAuthStore = create((set) => ({
       localStorage.setItem('token', access_token);
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
-      set({ user, token: access_token, loading: false });
+      set({ user, token: access_token });
       return { success: true };
     } catch (error) {
-      set({ loading: false });
       throw error;
     }
   },

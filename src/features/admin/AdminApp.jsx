@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 import AdminPlans from './components/AdminPlans';
-import { Loader2, LogOut, LayoutDashboard, CreditCard } from 'lucide-react';
+import AdminUsers from './components/AdminUsers';
+import { Loader2, LogOut, LayoutDashboard, CreditCard, Users } from 'lucide-react';
 
 export default function AdminApp() {
     const [adminUser, setAdminUser] = useState(null);
@@ -72,7 +73,10 @@ export default function AdminApp() {
                             <LayoutDashboard className="h-4 w-4" /> Dashboard
                         </button>
                         <button onClick={() => setActiveTab('plans')} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'plans' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`}>
-                            <CreditCard className="h-4 w-4" /> Subscriptions Let's Setup
+                            <CreditCard className="h-4 w-4" /> Subscriptions
+                        </button>
+                        <button onClick={() => setActiveTab('users')} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'users' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`}>
+                            <Users className="h-4 w-4" /> Users
                         </button>
                     </nav>
                 </div>
@@ -92,6 +96,7 @@ export default function AdminApp() {
             <main className="pt-24 px-6 md:px-8 max-w-7xl mx-auto pb-12">
                 {activeTab === 'dashboard' && <AdminDashboard onLogout={handleLogout} />}
                 {activeTab === 'plans' && <AdminPlans onLogout={handleLogout} />}
+                {activeTab === 'users' && <AdminUsers onLogout={handleLogout} />}
             </main>
         </div>
     );
