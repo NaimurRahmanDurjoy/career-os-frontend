@@ -181,32 +181,38 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
         </div>
 
         {/* OAuth Authentication Buttons */}
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-6 pb-2">
           <button
             onClick={() => handleSocialLogin('google')}
             type="button"
-            className="w-14 h-14 flex items-center justify-center bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-700/50 border border-slate-200 dark:border-slate-700/50 rounded-xl transition-all duration-300 group shadow-sm dark:shadow-none"
+            className="hover:opacity-80 transition-all duration-300 transform hover:-translate-y-1 hover:scale-110 drop-shadow-md focus:outline-none"
             aria-label="Continue with Google"
           >
-            <FcGoogle className="h-6 w-6 group-hover:scale-110 transition-transform" />
+            <FcGoogle className="h-9 w-9" />
           </button>
 
           <button
             onClick={() => handleSocialLogin('facebook')}
             type="button"
-            className="w-14 h-14 flex items-center justify-center bg-[#1877F2]/10 hover:bg-[#1877F2]/20 border border-[#1877F2]/20 rounded-xl transition-all duration-300 group shadow-sm dark:shadow-none"
+            className="hover:opacity-80 transition-all duration-300 transform hover:-translate-y-1 hover:scale-110 drop-shadow-md focus:outline-none"
             aria-label="Continue with Facebook"
           >
-            <FaFacebook className="h-6 w-6 text-[#1877F2] dark:text-[#589BFF] group-hover:scale-110 transition-transform" />
+            <svg viewBox="0 0 24 24" className="w-9 h-9" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23.998 12c0-6.628-5.372-12-11.999-12C5.372 0 0 5.372 0 12c0 5.988 4.388 10.952 10.124 11.852v-8.384H7.078v-3.469h3.046V9.356c0-3.008 1.792-4.669 4.532-4.669 1.313 0 2.686.234 2.686.234v2.953H15.83c-1.49 0-1.955.925-1.955 1.874V12h3.328l-.532 3.469h-2.796v8.384c5.736-.9 10.124-5.864 10.124-11.853z" fill="#1877F2" />
+              <path d="M16.126 15.469L16.658 12h-3.328v-2.183c0-.949.465-1.874 1.955-1.874h1.513V5.419s-1.373-.234-2.686-.234c-2.74 0-4.532 1.661-4.532 4.669V12H7.078v3.469h3.046v8.384a12.062 12.062 0 003.75 0v-8.384h2.796z" fill="#FFF" />
+            </svg>
           </button>
 
           <button
             onClick={() => handleSocialLogin('linkedin')}
             type="button"
-            className="w-14 h-14 flex items-center justify-center bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 border border-[#0A66C2]/20 rounded-xl transition-all duration-300 group shadow-sm dark:shadow-none"
+            className="hover:opacity-80 transition-all duration-300 transform hover:-translate-y-1 hover:scale-110 drop-shadow-md rounded focus:outline-none"
             aria-label="Continue with LinkedIn"
           >
-            <FaLinkedin className="h-6 w-6 text-[#0A66C2] dark:text-[#3B8DEB] group-hover:scale-110 transition-transform" />
+            <svg viewBox="0 0 24 24" className="w-9 h-9 rounded" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.23 0H1.77C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.77 24h20.46C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.23 0z" fill="#0A66C2" />
+              <path d="M7.119 20.452H3.554V9h3.565v11.452zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm15.11 13.019h-3.555v-5.569c0-1.328-.027-3.037-1.852-3.037-1.851 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z" fill="#FFF" />
+            </svg>
           </button>
         </div>
 
