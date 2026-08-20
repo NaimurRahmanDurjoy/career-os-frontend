@@ -84,7 +84,7 @@ export default function ResumeUploader() {
         onClick={handleContainerClick}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        className={`border-2 border-dashed rounded-3xl p-10 text-center transition-all duration-300 flex flex-col items-center justify-center cursor-pointer min-h-[300px] relative overflow-hidden group ${isProcessing
+        className={`border-2 border-dashed rounded-3xl p-6 md:p-10 text-center transition-all duration-300 flex flex-col items-center justify-center cursor-pointer min-h-[250px] md:min-h-[300px] relative overflow-hidden group ${isProcessing
           ? 'border-emerald-500/50 bg-emerald-500/10 cursor-not-allowed shadow-[0_0_30px_rgba(16,185,129,0.2)]'
           : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-900/80 hover:border-emerald-500/50 hover:shadow-[0_0_25px_rgba(16,185,129,0.15)]'
           }`}

@@ -92,7 +92,7 @@ export default function App() {
       )}
 
       {activeView === 'resume' && (
-        <div className="md:px-8 max-w-[1600px] w-full mx-auto h-[calc(100vh-12rem)] flex gap-6 relative z-10">
+        <div className="px-4 md:px-8 max-w-[1600px] w-full mx-auto h-[calc(100vh-12rem)] flex flex-col md:flex-row gap-6 relative z-10">
           {/* Sidebar */}
           <div className="w-72 shrink-0 hidden lg:block h-full">
             <ResumeVersionList onSelect={(id) => useResumeStore.getState().pollResumeStatus(id)} />
@@ -101,12 +101,12 @@ export default function App() {
           {/* Main Area */}
           <div className="flex-1 overflow-y-auto pr-2 pretty-scrollbar">
             {!resumeAnalysisData ? (
-              <div className="space-y-6 max-w-3xl mx-auto text-center mt-12">
-                <div className="space-y-4">
-                  <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 tracking-tight sm:text-6xl pb-2">
+              <div className="space-y-4 md:space-y-6 max-w-3xl mx-auto text-center mt-6 md:mt-12 px-2">
+                <div className="space-y-3 md:space-y-4">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 tracking-tight pb-2">
                     Optimize Your Application
                   </h1>
-                  <p className="text-slate-600 dark:text-slate-400 text-base max-w-xl mx-auto leading-relaxed font-medium">
+                  <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base max-w-xl mx-auto leading-relaxed font-medium">
                     Upload your resume file below to automatically extract and parse your career data.
                   </p>
                 </div>
