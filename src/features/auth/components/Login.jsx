@@ -3,6 +3,7 @@ import { useAuthStore } from '../store/useAuthStore';
 import { loginSchema } from '../validations/authValidation';
 import { Mail, Lock, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
 import { FcGoogle } from "react-icons/fc";
+import { FaFacebook, FaLinkedin } from "react-icons/fa";
 
 export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) {
   // Select only the exact slice required to prevent unnecessary re-renders
@@ -92,45 +93,59 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
 
         {/* Traditional Credentials Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-1.5">
-            <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pl-1">
+          <div className="relative mt-4">
+            <input
+              type="text"
+              name="email"
+              id="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder=" "
+              className={`peer w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-900 border ${fieldErrors.email ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500' : 'border-slate-200 dark:border-slate-700/50 focus:border-emerald-500 focus:ring-emerald-500'} rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-1 transition-all text-sm shadow-sm dark:shadow-inner dark:shadow-black/20`}
+            />
+            <label
+              htmlFor="email"
+              className={`absolute left-11 px-1.5 bg-white dark:bg-slate-900 transition-all duration-200 pointer-events-none 
+              ${fieldErrors.email ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400 peer-focus:text-emerald-500 dark:peer-focus:text-emerald-400'} 
+              -top-2.5 text-[10px] font-bold uppercase tracking-widest
+              peer-placeholder-shown:top-[15px] peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal
+              peer-focus:-top-2.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest`}
+            >
               Email Address
             </label>
-            <div className="relative group">
-              <Mail className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 dark:text-slate-500 group-focus-within:text-emerald-500 dark:group-focus-within:text-emerald-400 transition-colors" />
-              <input
-                name="email"
-                type="text"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="you@example.com"
-                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-950/50 border border-slate-200 dark:border-slate-700/50 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm shadow-sm dark:shadow-inner dark:shadow-black/20"
-              />
-            </div>
+            <Mail className={`absolute left-4 top-[15px] h-5 w-5 pointer-events-none transition-colors ${fieldErrors.email ? 'text-red-500/50 dark:text-red-400/50' : 'text-slate-400 dark:text-slate-500 peer-focus:text-emerald-500 dark:peer-focus:text-emerald-400'}`} />
+
             {fieldErrors.email && (
               <p className="text-red-500 dark:text-red-400 text-xs mt-1.5 font-medium pl-1">{fieldErrors.email}</p>
             )}
           </div>
 
-          <div className="space-y-1.5">
-            <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pl-1">
+          <div className="relative mt-6">
+            <input
+              type="password"
+              name="password"
+              id="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder=" "
+              className={`peer w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-900 border ${fieldErrors.password ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500' : 'border-slate-200 dark:border-slate-700/50 focus:border-emerald-500 focus:ring-emerald-500'} rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-1 transition-all text-sm shadow-sm dark:shadow-inner dark:shadow-black/20`}
+            />
+            <label
+              htmlFor="password"
+              className={`absolute left-11 px-1.5 bg-white dark:bg-slate-900 transition-all duration-200 pointer-events-none 
+              ${fieldErrors.password ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400 peer-focus:text-emerald-500 dark:peer-focus:text-emerald-400'} 
+              -top-2.5 text-[10px] font-bold uppercase tracking-widest
+              peer-placeholder-shown:top-[15px] peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal
+              peer-focus:-top-2.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest`}
+            >
               Password
             </label>
-            <div className="relative group">
-              <Lock className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 dark:text-slate-500 group-focus-within:text-emerald-500 dark:group-focus-within:text-emerald-400 transition-colors" />
-              <input
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder="••••••••"
-                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-950/50 border border-slate-200 dark:border-slate-700/50 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm shadow-sm dark:shadow-inner dark:shadow-black/20"
-              />
-            </div>
+            <Lock className={`absolute left-4 top-[15px] h-5 w-5 pointer-events-none transition-colors ${fieldErrors.password ? 'text-red-500/50 dark:text-red-400/50' : 'text-slate-400 dark:text-slate-500 peer-focus:text-emerald-500 dark:peer-focus:text-emerald-400'}`} />
+
             {fieldErrors.password && (
               <p className="text-red-500 dark:text-red-400 text-xs mt-1.5 font-medium pl-1">{fieldErrors.password}</p>
             )}
-            <div className="flex justify-end pt-1 pr-1">
+            <div className="flex justify-end pt-1.5 pr-1">
               <button
                 type="button"
                 onClick={onSwitchToForgotPassword}
@@ -165,15 +180,35 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
           <div className="flex-grow border-t border-slate-700/50"></div>
         </div>
 
-        {/* OAuth Authentication Button */}
-        <button
-          onClick={() => handleSocialLogin('google')}
-          type="button"
-          className="w-full bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-700/50 border border-slate-200 dark:border-slate-700/50 text-slate-700 dark:text-slate-200 font-bold py-3.5 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 text-sm group shadow-sm dark:shadow-none"
-        >
-          <FcGoogle className="h-5 w-5 group-hover:scale-110 transition-transform" />
-          Google Account
-        </button>
+        {/* OAuth Authentication Buttons */}
+        <div className="flex items-center justify-center gap-4">
+          <button
+            onClick={() => handleSocialLogin('google')}
+            type="button"
+            className="w-14 h-14 flex items-center justify-center bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-700/50 border border-slate-200 dark:border-slate-700/50 rounded-xl transition-all duration-300 group shadow-sm dark:shadow-none"
+            aria-label="Continue with Google"
+          >
+            <FcGoogle className="h-6 w-6 group-hover:scale-110 transition-transform" />
+          </button>
+
+          <button
+            onClick={() => handleSocialLogin('facebook')}
+            type="button"
+            className="w-14 h-14 flex items-center justify-center bg-[#1877F2]/10 hover:bg-[#1877F2]/20 border border-[#1877F2]/20 rounded-xl transition-all duration-300 group shadow-sm dark:shadow-none"
+            aria-label="Continue with Facebook"
+          >
+            <FaFacebook className="h-6 w-6 text-[#1877F2] dark:text-[#589BFF] group-hover:scale-110 transition-transform" />
+          </button>
+
+          <button
+            onClick={() => handleSocialLogin('linkedin')}
+            type="button"
+            className="w-14 h-14 flex items-center justify-center bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 border border-[#0A66C2]/20 rounded-xl transition-all duration-300 group shadow-sm dark:shadow-none"
+            aria-label="Continue with LinkedIn"
+          >
+            <FaLinkedin className="h-6 w-6 text-[#0A66C2] dark:text-[#3B8DEB] group-hover:scale-110 transition-transform" />
+          </button>
+        </div>
 
         <div className="text-center pt-4">
           <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">

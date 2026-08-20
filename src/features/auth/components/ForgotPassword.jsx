@@ -61,20 +61,26 @@ export default function ForgotPassword({ onSwitchToLogin }) {
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        <div className="space-y-1.5">
-                            <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pl-1">
+                        <div className="relative mt-2 mb-6">
+                            <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder=" "
+                                className={`peer w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 focus:border-emerald-500 focus:ring-emerald-500 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-1 transition-all text-sm shadow-sm dark:shadow-inner dark:shadow-black/20`}
+                            />
+                            <label
+                                htmlFor="email"
+                                className={`absolute left-11 px-1.5 bg-white dark:bg-slate-900 transition-all duration-200 pointer-events-none 
+                                text-slate-500 dark:text-slate-400 peer-focus:text-emerald-500 dark:peer-focus:text-emerald-400
+                                -top-2.5 text-[10px] font-bold uppercase tracking-widest
+                                peer-placeholder-shown:top-[15px] peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal
+                                peer-focus:-top-2.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest`}
+                            >
                                 Email Address
                             </label>
-                            <div className="relative group">
-                                <Mail className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 dark:text-slate-500 group-focus-within:text-emerald-500 dark:group-focus-within:text-emerald-400 transition-colors" />
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="you@example.com"
-                                    className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-950/50 border border-slate-200 dark:border-slate-700/50 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm shadow-sm dark:shadow-inner dark:shadow-black/20"
-                                />
-                            </div>
+                            <Mail className={`absolute left-4 top-[15px] h-5 w-5 pointer-events-none transition-colors text-slate-400 dark:text-slate-500 peer-focus:text-emerald-500 dark:peer-focus:text-emerald-400`} />
                         </div>
 
                         <button
