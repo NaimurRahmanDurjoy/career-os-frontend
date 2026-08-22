@@ -4,7 +4,7 @@ import { X, Copy, CheckCircle2, Download, Zap, FileText, Upload, Save } from 'lu
 import { useJobsStore } from '../store/useJobsStore';
 
 export default function CoverLetterModal({ job, isOpen, onClose }) {
-    const { generateCoverLetter, saveManualCoverLetter } = useJobsStore();
+    const { generateCoverLetter, saveManualCoverLetter, fetchCoverLetter } = useJobsStore();
     const [letter, setLetter] = useState(null);
     const [loading, setLoading] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -14,7 +14,6 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
 
     React.useEffect(() => {
         if (!isOpen) {
-            // Reset when closed
             setTimeout(() => {
                 setLetter(null);
                 setCopied(false);
@@ -23,10 +22,14 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
                 setManualText('');
             }, 300);
         } else {
-            // Load from DB if it exists
-            if (job.ai_match && job.ai_match.generated_cover_letter) {
-                setLetter(job.ai_match.generated_cover_letter);
-            }
+            // Load from dedicated REST endpoint instead of nested job status
+            const loadLetter = async () => {
+                const data = await fetchCoverLetter(job.id);
+                if (data && data.content) {
+                    setLetter(data.content);
+                }
+            };
+            loadLetter();
         }
     }, [isOpen, job]);
 
@@ -40,7 +43,7 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
         setError(null);
         try {
             const data = await generateCoverLetter(job.id);
-            setLetter(data.cover_letter);
+            setLetter(data.cover_letter.content);
         } catch (err) {
             setError(err.response?.data?.message || err.message || "Failed to generate cover letter.");
         } finally {
