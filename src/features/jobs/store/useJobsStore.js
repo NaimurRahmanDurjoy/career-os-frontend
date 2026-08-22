@@ -86,6 +86,46 @@ export const useJobsStore = create((set, get) => ({
         }
     },
 
+    // --- Contacts (CRM) ---
+    fetchContacts: async (jobId) => {
+        try {
+            const response = await apiClient.get(`/jobs/${jobId}/contacts`);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch contacts:', error);
+            throw error;
+        }
+    },
+
+    addContact: async (jobId, contactData) => {
+        try {
+            const response = await apiClient.post(`/jobs/${jobId}/contacts`, contactData);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to add contact:', error);
+            throw error;
+        }
+    },
+
+    updateContact: async (contactId, contactData) => {
+        try {
+            const response = await apiClient.put(`/contacts/${contactId}`, contactData);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to update contact:', error);
+            throw error;
+        }
+    },
+
+    deleteContact: async (contactId) => {
+        try {
+            await apiClient.delete(`/contacts/${contactId}`);
+        } catch (error) {
+            console.error('Failed to delete contact:', error);
+            throw error;
+        }
+    },
+
     // --- AI Job Match Actions ---
     analyzeJobMatch: async (jobId) => {
         try {

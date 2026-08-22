@@ -3,11 +3,13 @@ import { useJobsStore } from './store/useJobsStore';
 import KanbanBoard from './components/KanbanBoard';
 import AddJobModal from './components/AddJobModal';
 import NotesDrawer from './components/NotesDrawer';
+import ContactsDrawer from './components/ContactsDrawer';
 
 export default function JobsDashboard() {
     const { fetchJobs, loading, jobs } = useJobsStore();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [selectedJobForNotes, setSelectedJobForNotes] = useState(null);
+    const [selectedJobForContacts, setSelectedJobForContacts] = useState(null);
 
     useEffect(() => {
         fetchJobs();
@@ -40,7 +42,7 @@ export default function JobsDashboard() {
                         <span className="font-bold uppercase tracking-widest text-xs">Synchronizing Timeline...</span>
                     </div>
                 ) : (
-                    <KanbanBoard onOpenNotes={setSelectedJobForNotes} />
+                    <KanbanBoard onOpenNotes={setSelectedJobForNotes} onOpenContacts={setSelectedJobForContacts} />
                 )}
             </div>
 
@@ -53,6 +55,12 @@ export default function JobsDashboard() {
                 isOpen={!!selectedJobForNotes}
                 onClose={() => setSelectedJobForNotes(null)}
                 job={selectedJobForNotes}
+            />
+
+            <ContactsDrawer
+                isOpen={!!selectedJobForContacts}
+                onClose={() => setSelectedJobForContacts(null)}
+                job={selectedJobForContacts}
             />
         </div>
     );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useJobsStore } from '../store/useJobsStore';
-import { Briefcase, Calendar, Banknote, Trash2, FileText, Bot, AlertCircle } from 'lucide-react';
+import { Briefcase, Calendar, Banknote, Trash2, FileText, Bot, AlertCircle, Users } from 'lucide-react';
 import InterviewPrepPanel from './InterviewPrepPanel';
 import RejectionAnalysisModal from './RejectionAnalysisModal';
 import NegotiationTipsModal from './NegotiationTipsModal';
@@ -8,7 +8,7 @@ import CoverLetterModal from './CoverLetterModal';
 import { useAuthStore } from '../../auth/store/useAuthStore';
 import PaywallModal from '../../../components/common/PaywallModal';
 
-export default function JobCard({ job, onOpenNotes }) {
+export default function JobCard({ job, onOpenNotes, onOpenContacts }) {
     const { user } = useAuthStore();
     const { deleteJob, updateJobStatus } = useJobsStore();
     const [showInterviewPrep, setShowInterviewPrep] = useState(false);
@@ -57,6 +57,13 @@ export default function JobCard({ job, onOpenNotes }) {
                         title="Application Notes"
                     >
                         <FileText size={16} />
+                    </button>
+                    <button
+                        onClick={() => onOpenContacts && onOpenContacts(job)}
+                        className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-blue-500 transition-opacity p-1 -mt-1"
+                        title="CRM Contacts"
+                    >
+                        <Users size={16} />
                     </button>
                     <button
                         onClick={() => deleteJob(job.id)}
