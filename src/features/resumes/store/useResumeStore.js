@@ -32,7 +32,7 @@ export const useResumeStore = create((set, get) => ({
 
     try {
       // Hit the explicit upload endpoint provided in your controller
-      const response = await apiClient.post('/resumes/upload', formData, {
+      const response = await apiClient.post('/resumes', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
