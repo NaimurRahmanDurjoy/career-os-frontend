@@ -5,6 +5,7 @@ import { useAuthStore } from '../../features/auth/store/useAuthStore';
 import { Sun, Moon, User } from 'lucide-react';
 import { useThemeStore } from '../../store/useThemeStore';
 import ReminderBell from '../../features/reminders/components/ReminderBell';
+import FloatingChatbot from '../../features/chat/components/FloatingChatbot';
 
 export default function MainLayout({ children, activeView, setActiveView }) {
     const user = useAuthStore((state) => state.user);
@@ -81,6 +82,8 @@ export default function MainLayout({ children, activeView, setActiveView }) {
                     {children}
                 </div>
             </main>
+
+            <FloatingChatbot />
         </div>
     );
 }
