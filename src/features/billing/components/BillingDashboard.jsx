@@ -7,7 +7,7 @@ export default function BillingDashboard() {
     const [plans, setPlans] = useState([]);
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [checkoutLoading, setCheckoutLoading] = useState(false);
+    const [checkoutLoading, setCheckoutLoading] = useState(null);
     const [error, setError] = useState('');
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -37,7 +37,7 @@ export default function BillingDashboard() {
     }, []);
 
     const handleCheckout = async (gateway, planId) => {
-        setCheckoutLoading(true);
+        setCheckoutLoading(`${gateway}-${planId}`);
         setError('');
         try {
             const token = localStorage.getItem('token');
@@ -58,7 +58,7 @@ export default function BillingDashboard() {
 
         } catch (err) {
             setError(err.message);
-            setCheckoutLoading(false);
+            setCheckoutLoading(null);
         }
     };
 
@@ -244,19 +244,19 @@ export default function BillingDashboard() {
                                 <div className="space-y-3 mt-auto pt-6">
                                     <button
                                         onClick={() => handleCheckout('sslcommerz', plan.id)}
-                                        disabled={checkoutLoading}
+                                        disabled={checkoutLoading !== null}
                                         className={`w-full relative group font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs lg:text-sm ${plan.popular ? 'bg-emerald-50 hover:bg-emerald-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-emerald-900 dark:text-emerald-400 border border-emerald-200 dark:border-slate-700' : 'bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700'}`}
                                     >
-                                        {checkoutLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wallet className={`h-4 w-4 ${plan.popular ? 'text-emerald-600 dark:text-emerald-500' : 'text-slate-500'}`} />}
+                                        {checkoutLoading === `sslcommerz-${plan.id}` ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wallet className={`h-4 w-4 ${plan.popular ? 'text-emerald-600 dark:text-emerald-500' : 'text-slate-500'}`} />}
                                         Pay via bKash/Local
                                     </button>
 
                                     <button
                                         onClick={() => handleCheckout('stripe', plan.id)}
-                                        disabled={checkoutLoading}
+                                        disabled={checkoutLoading !== null}
                                         className={`w-full relative group font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition-all text-xs lg:text-sm border ${plan.popular ? 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 shadow-[0_0_10px_rgba(79,70,229,0.3)] text-white border-indigo-500' : 'bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'}`}
                                     >
-                                        {checkoutLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4 opacity-70" />}
+                                        {checkoutLoading === `stripe-${plan.id}` ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4 opacity-70" />}
                                         Pay via Stripe/Card
                                     </button>
                                 </div>
