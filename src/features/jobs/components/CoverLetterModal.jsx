@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Copy, CheckCircle2, Download, Zap, FileText, Upload, Save } from 'lucide-react';
+import { X, Copy, CheckCircle2, Download, Zap, FileText, Upload, Save, RefreshCw } from 'lucide-react';
 import { useJobsStore } from '../store/useJobsStore';
 
 export default function CoverLetterModal({ job, isOpen, onClose }) {
@@ -187,6 +187,12 @@ export default function CoverLetterModal({ job, isOpen, onClose }) {
                 {/* Footer fixed */}
                 {letter && !loading && (
                     <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex justify-end gap-3 bg-white dark:bg-slate-900 rounded-b-2xl">
+                        <button
+                            onClick={handleGenerate}
+                            className="px-5 py-2 mr-auto hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-bold text-sm rounded-lg transition-colors flex items-center gap-2"
+                        >
+                            <RefreshCw size={16} /> Regenerate
+                        </button>
                         <button
                             onClick={handleCopy}
                             className="px-5 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-sm rounded-lg transition-colors flex items-center gap-2"

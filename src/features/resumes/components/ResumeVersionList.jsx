@@ -3,7 +3,7 @@ import { useResumeStore } from '../store/useResumeStore';
 import { FileText, CheckCircle2, Trash2, Calendar } from 'lucide-react';
 
 export default function ResumeVersionList({ onSelect }) {
-    const { resumes, fetchResumes, deleteResume, setPrimary, analysisData } = useResumeStore();
+    const { resumes, fetchResumes, deleteResume, setPrimary, currentResumeId } = useResumeStore();
 
     React.useEffect(() => {
         fetchResumes();
@@ -31,7 +31,7 @@ export default function ResumeVersionList({ onSelect }) {
 
             <div className="flex-1 overflow-y-auto space-y-2 pr-1 pretty-scrollbar">
                 {resumes.map(resume => {
-                    const isActive = analysisData?.id === resume.id;
+                    const isActive = currentResumeId === resume.id;
                     const isPrimary = resume.is_primary;
 
                     return (
@@ -39,8 +39,8 @@ export default function ResumeVersionList({ onSelect }) {
                             key={resume.id}
                             onClick={() => onSelect(resume.id)}
                             className={`group relative p-3 rounded-xl border transition-all cursor-pointer shadow-sm ${isActive
-                                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
-                                    : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:border-slate-300 dark:hover:border-slate-700'
+                                ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20'
+                                : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:border-slate-300 dark:hover:border-slate-700'
                                 }`}
                         >
                             <div className="flex justify-between items-start mb-1">

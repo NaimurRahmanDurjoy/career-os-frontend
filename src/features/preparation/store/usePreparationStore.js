@@ -46,7 +46,7 @@ export const usePreparationStore = create((set, get) => ({
         try {
             await apiClient.delete(`/preparation-trackers/${id}`);
             set(state => ({
-                trackers: state.trackers.filter(t => t.id !== id)
+                trackers: state.trackers.filter(t => String(t.id) !== String(id))
             }));
         } catch (error) {
             console.error('Failed to delete tracker', error);

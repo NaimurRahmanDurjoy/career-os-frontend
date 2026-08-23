@@ -95,7 +95,7 @@ export default function App() {
         <div className="px-4 md:px-8 max-w-[1600px] w-full mx-auto h-[calc(100vh-12rem)] flex flex-col md:flex-row gap-6 relative z-10">
           {/* Sidebar */}
           <div className="w-72 shrink-0 hidden lg:block h-full">
-            <ResumeVersionList onSelect={(id) => useResumeStore.getState().pollResumeStatus(id)} />
+            <ResumeVersionList onSelect={(id) => useResumeStore.getState().selectResume(id)} />
           </div>
 
           {/* Main Area */}

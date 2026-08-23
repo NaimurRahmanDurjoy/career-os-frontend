@@ -14,11 +14,13 @@ export default function MockTestDashboard() {
 
     const { user } = useAuthStore();
     const [showPaywall, setShowPaywall] = useState(false);
+    const [generateError, setGenerateError] = useState(null);
 
     const handleNewClick = () => {
         if ((user?.usage?.mock_tests || 0) >= (user?.limits?.mock_tests || 0)) {
             setShowPaywall(true);
         } else {
+            setGenerateError(null);
             setIsCreating(true);
         }
     };
@@ -29,10 +31,15 @@ export default function MockTestDashboard() {
 
     const handleGenerate = async () => {
         if (!newTopic.trim()) return;
-        const test = await generateTest(newTopic);
-        setIsCreating(false);
-        setNewTopic('');
-        startQuiz(test);
+        setGenerateError(null);
+        try {
+            await generateTest(newTopic);
+            setIsCreating(false);
+            setNewTopic('');
+        } catch (error) {
+            console.error("Test generation failed:", error);
+            setGenerateError(error?.response?.data?.message || "Too Many Requests (Rate Limit). Please wait a moment.");
+        }
     };
 
     const startQuiz = (test) => {
@@ -59,10 +66,17 @@ export default function MockTestDashboard() {
     };
 
     if (activeQuiz) {
-        const isCompleted = activeQuiz.user_answers !== null;
-        const quizData = activeQuiz.quiz_data;
-        const q = quizData[currentQuestionIndex];
-        const selectedOpt = isCompleted ? activeQuiz.user_answers[currentQuestionIndex] : answers[currentQuestionIndex];
+        const isCompleted = !!activeQuiz.user_answers;
+
+        // Safely parse quiz data to ensure it is always a mappable array
+        let quizData = activeQuiz.quiz_data || [];
+        if (typeof quizData === 'string') {
+            try { quizData = JSON.parse(quizData); } catch (e) { quizData = []; }
+        }
+        if (!Array.isArray(quizData)) quizData = Object.values(quizData || {});
+
+        const q = quizData[currentQuestionIndex] || {};
+        const selectedOpt = isCompleted ? (activeQuiz.user_answers?.[currentQuestionIndex]) : answers[currentQuestionIndex];
 
         return (
             <div className="md:px-8 max-w-[1600px] w-full mx-auto relative z-10 animate-fadeIn">
@@ -100,7 +114,7 @@ export default function MockTestDashboard() {
                         </h3>
 
                         <div className="space-y-4">
-                            {q?.options.map((opt, idx) => {
+                            {(q?.options || q?.choices || []).map((opt, idx) => {
                                 let styleClass = "border-slate-200 dark:border-slate-700 hover:border-indigo-400 bg-white dark:bg-slate-800/50";
                                 let icon = null;
 
@@ -195,6 +209,13 @@ export default function MockTestDashboard() {
                     <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-4 uppercase tracking-wide text-sm flex items-center gap-2">
                         <BrainCircuit size={16} className="text-indigo-500" /> Subject / Topic
                     </h3>
+
+                    {generateError && (
+                        <div className="mb-4 text-sm text-rose-600 bg-rose-50 border border-rose-200 p-3 rounded-xl dark:bg-rose-900/20 dark:border-rose-900/50 dark:text-rose-400 font-medium">
+                            <strong>Generation Failed: </strong> {generateError}
+                        </div>
+                    )}
+
                     <div className="flex gap-4">
                         <input
                             type="text"
@@ -222,7 +243,7 @@ export default function MockTestDashboard() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tests.map(test => {
-                    const isCompleted = test.user_answers !== null;
+                    const isCompleted = test.user_answers !== null && test.user_answers !== undefined && Object.keys(test.user_answers).length > 0;
                     return (
                         <div key={test.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm group hover:shadow-md transition-shadow relative">
                             <button

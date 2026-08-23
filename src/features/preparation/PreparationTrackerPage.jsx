@@ -109,7 +109,14 @@ export default function PreparationTrackerPage() {
                                             {tracker.exam_type}
                                         </h2>
                                         <button
-                                            onClick={() => window.confirm('Delete this entire roadmap?') && deleteTracker(tracker.id)}
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                if (window.confirm('Delete this entire roadmap?')) {
+                                                    deleteTracker(tracker.id).catch(err => alert("Failed to delete! " + err));
+                                                }
+                                            }}
                                             className="text-slate-400 hover:text-rose-500 transition-colors p-2 -mr-2"
                                             title="Delete Tracker"
                                         >

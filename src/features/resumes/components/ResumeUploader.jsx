@@ -7,15 +7,18 @@ import PaywallModal from '../../../components/common/PaywallModal';
 export default function ResumeUploader() {
   // Selective store extraction to intercept rendering noise
   const uploadAndAnalyzeResume = useResumeStore((state) => state.uploadAndAnalyzeResume);
+  const retryResumeAnalysis = useResumeStore((state) => state.retryResumeAnalysis);
   const isProcessing = useResumeStore((state) => state.isProcessing);
   const networkError = useResumeStore((state) => state.networkError);
   const validationError = useResumeStore((state) => state.validationError);
+  const currentResumeId = useResumeStore((state) => state.currentResumeId);
 
   const user = useAuthStore((state) => state.user);
   const [isPaywallOpen, setIsPaywallOpen] = useState(false);
 
   const fileInputRef = useRef(null);
   const [localFileError, setLocalFileError] = useState('');
+  const [versionName, setVersionName] = useState('');
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -45,7 +48,7 @@ export default function ResumeUploader() {
     }
 
     // Trigger the decoupled atomic upload request stream
-    await uploadAndAnalyzeResume(file);
+    await uploadAndAnalyzeResume(file, versionName || 'Main Version');
   };
 
   const handleDrop = (e) => {
@@ -60,6 +63,12 @@ export default function ResumeUploader() {
     processFileInstance(file);
   };
 
+  const handleRetry = () => {
+    if (currentResumeId) {
+      retryResumeAnalysis(currentResumeId);
+    }
+  };
+
   const handleContainerClick = () => {
     if (!isProcessing && fileInputRef.current) {
       fileInputRef.current.click();
@@ -71,14 +80,43 @@ export default function ResumeUploader() {
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
       {activeErrorMessage && (
-        <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400 p-4 rounded-xl flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-          <div className="text-xs font-medium space-y-1">
-            <p className="font-bold">Parsing Exception Intercepted</p>
-            <p>{activeErrorMessage}</p>
+        <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 p-4 rounded-xl flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3 text-red-600 dark:text-red-400">
+            <AlertTriangle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+            <div className="text-xs font-medium space-y-1">
+              <p className="font-bold">Parsing Exception Intercepted</p>
+              <p>{activeErrorMessage}</p>
+            </div>
           </div>
+          {currentResumeId && (
+            <button
+              onClick={handleRetry}
+              disabled={isProcessing}
+              className="px-3 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-500/20 dark:hover:bg-red-500/30 text-red-700 dark:text-red-300 rounded-lg text-[11px] font-bold transition-colors whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-red-500/50 uppercase tracking-wider"
+            >
+              Retry Parsing
+            </button>
+          )}
         </div>
       )}
+
+      <div className="relative mt-4">
+        <input
+          id="versionName"
+          type="text"
+          placeholder="e.g. Frontend Developer Resume"
+          value={versionName}
+          onChange={(e) => setVersionName(e.target.value)}
+          className="peer w-full pl-4 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 focus:border-emerald-500 focus:ring-emerald-500 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-1 transition-all text-sm shadow-sm dark:shadow-inner dark:shadow-black/20 placeholder-transparent focus:placeholder-slate-400 dark:focus:placeholder-slate-500"
+          disabled={isProcessing}
+        />
+        <label
+          htmlFor="versionName"
+          className="absolute left-3 px-1.5 bg-white dark:bg-slate-900 transition-all duration-200 pointer-events-none text-slate-500 dark:text-slate-400 peer-focus:text-emerald-500 dark:peer-focus:text-emerald-400 -top-2.5 text-[10px] font-bold uppercase tracking-widest peer-placeholder-shown:top-[15px] peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:-top-2.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-widest"
+        >
+          Version Name (Optional)
+        </label>
+      </div>
 
       <div
         onClick={handleContainerClick}

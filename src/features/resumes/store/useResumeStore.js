@@ -20,15 +20,20 @@ export const useResumeStore = create((set, get) => ({
     });
   },
 
+  selectResume: (id) => {
+    set({ currentResumeId: id, networkError: null, validationError: null, analysisData: null });
+    get().pollResumeStatus(id);
+  },
+
   /**
    * Step 1: Uploads the binary and handles Laravel's immediate 202 Queue Response
    */
-  uploadAndAnalyzeResume: async (resumeFileBinary) => {
+  uploadAndAnalyzeResume: async (resumeFileBinary, versionName = 'Main Version') => {
     set({ isProcessing: true, networkError: null, validationError: null, analysisData: null });
 
     const formData = new FormData();
     formData.append('resume', resumeFileBinary);
-    formData.append('version_name', 'Main Version');
+    formData.append('version_name', versionName || 'Main Version');
 
     try {
       // Hit the explicit upload endpoint provided in your controller
@@ -52,6 +57,25 @@ export const useResumeStore = create((set, get) => ({
       console.error('Upload phase failure:', error);
       set({
         networkError: error.response?.data?.message || 'Network handshake failed during file transfer.',
+        isProcessing: false,
+      });
+      return { success: false, variant: 'network' };
+    }
+  },
+
+  retryResumeAnalysis: async (id) => {
+    set({ isProcessing: true, networkError: null, validationError: null, analysisData: null });
+
+    try {
+      const response = await apiClient.post(`/resumes/${id}/retry`);
+
+      if (response.status === 202) {
+        return await get().pollResumeStatus(id);
+      }
+    } catch (error) {
+      console.error('Retry phase failure:', error);
+      set({
+        networkError: error.response?.data?.message || 'Failed to initialize retry.',
         isProcessing: false,
       });
       return { success: false, variant: 'network' };
