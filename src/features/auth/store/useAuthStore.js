@@ -108,6 +108,16 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  updateApiKeys: async (openaiKey, geminiKey, groqKey) => {
+    try {
+      const response = await authApi.updateApiKeys(openaiKey, geminiKey, groqKey);
+      set((state) => ({ user: { ...state.user, ...response.user } }));
+      return { success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
+
   /**
    * Purges tracking records cleanly on both client memory and server instances
    */

@@ -79,6 +79,15 @@ export const authApi = {
     return response.data;
   },
 
+  async updateApiKeys(openaiKey, geminiKey, groqKey) {
+    const response = await apiClient.put('/user/api-keys', {
+      openai_key: openaiKey,
+      gemini_key: geminiKey,
+      groq_key: groqKey
+    });
+    return response.data;
+  },
+
   /**
    * Triggers a password reset link to be sent to the given email
    */

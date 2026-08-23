@@ -6,6 +6,7 @@ export default function Profile() {
     const user = useAuthStore((state) => state.user);
     const updateProfile = useAuthStore((state) => state.updateProfile);
     const updatePassword = useAuthStore((state) => state.updatePassword);
+    const updateApiKeys = useAuthStore((state) => state.updateApiKeys);
 
     // Tab State
     const [activeTab, setActiveTab] = useState('overview');
@@ -23,10 +24,20 @@ export default function Profile() {
     const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
     const [passwordStatusMessage, setPasswordStatusMessage] = useState(null);
 
+    // AI Integrations State
+    const [openaiKey, setOpenaiKey] = useState(user?.custom_api_keys?.openai || '');
+    const [geminiKey, setGeminiKey] = useState(user?.custom_api_keys?.gemini || '');
+    const [groqKey, setGroqKey] = useState(user?.custom_api_keys?.groq || '');
+    const [isUpdatingKeys, setIsUpdatingKeys] = useState(false);
+    const [keysStatusMessage, setKeysStatusMessage] = useState(null);
+
     useEffect(() => {
         if (user) {
             setName(user.name);
             setEmail(user.email);
+            setOpenaiKey(user.custom_api_keys?.openai || '');
+            setGeminiKey(user.custom_api_keys?.gemini || '');
+            setGroqKey(user.custom_api_keys?.groq || '');
         }
     }, [user]);
 
@@ -60,6 +71,21 @@ export default function Profile() {
             setPasswordStatusMessage({ type: 'error', text: error.response?.data?.message || 'Failed to update password.' });
         } finally {
             setIsUpdatingPassword(false);
+        }
+    };
+
+    const handleUpdateKeys = async (e) => {
+        e.preventDefault();
+        setIsUpdatingKeys(true);
+        setKeysStatusMessage(null);
+        try {
+            await updateApiKeys(openaiKey, geminiKey, groqKey);
+            setKeysStatusMessage({ type: 'success', text: 'AI capabilities synced successfully.' });
+            setTimeout(() => setKeysStatusMessage(null), 3000);
+        } catch (error) {
+            setKeysStatusMessage({ type: 'error', text: error.response?.data?.message || 'Failed to sync providers.' });
+        } finally {
+            setIsUpdatingKeys(false);
         }
     };
 
@@ -104,8 +130,11 @@ export default function Profile() {
                                 </button>
                             </li>
                             <li>
-                                <button className="w-full flex items-center gap-3 px-6 py-4 text-sm font-bold text-slate-400 dark:text-slate-600 cursor-not-allowed border-l-4 border-transparent">
-                                    <Settings size={18} /> Application Settings
+                                <button
+                                    onClick={() => setActiveTab('ai_integrations')}
+                                    className={`w-full flex items-center gap-3 px-6 py-4 text-sm font-bold transition-colors ${activeTab === 'ai_integrations' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-l-4 border-emerald-500' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 border-l-4 border-transparent'}`}
+                                >
+                                    <Settings size={18} /> AI Integrations
                                 </button>
                             </li>
                             <li>
@@ -259,6 +288,91 @@ export default function Profile() {
                                             <><Loader2 className="h-4 w-4 animate-spin" /> Saving... </>
                                         ) : (
                                             'Update Password'
+                                        )}
+                                    </button>
+                                </form>
+                            </div>
+                        )}
+
+                        {activeTab === 'ai_integrations' && (
+                            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                <h3 className="text-lg font-black text-slate-800 dark:text-slate-200 mb-6 flex items-center gap-2">
+                                    <span className="w-1.5 h-6 bg-emerald-500 rounded-full inline-block"></span>
+                                    Bring Your Own Key (BYOK)
+                                </h3>
+
+                                <div className="mb-6 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 p-4 rounded-xl text-sm text-slate-600 dark:text-slate-300 shadow-inner">
+                                    By providing your own API keys, CareerOS will bypass default quotas and route AI generation heavily through your personal plans securely. Keys are heavily encrypted securely at rest in the database.
+                                </div>
+
+                                {keysStatusMessage && (
+                                    <div className={`mb-6 p-4 rounded-xl flex items-center gap-3 text-sm font-medium ${keysStatusMessage.type === 'success' ? 'bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-600 dark:text-red-400'}`}>
+                                        {keysStatusMessage.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+                                        {keysStatusMessage.text}
+                                    </div>
+                                )}
+
+                                <form className="space-y-6" onSubmit={handleUpdateKeys}>
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pl-1 mb-1.5 flex justify-between">
+                                            <span>OpenAI Key</span>
+                                            <span className="text-[10px] text-slate-400">sk-proj-...</span>
+                                        </label>
+                                        <div className="relative group">
+                                            <Lock className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 dark:text-slate-500 group-focus-within:text-emerald-500 dark:group-focus-within:text-emerald-400 transition-colors" />
+                                            <input
+                                                type="password"
+                                                value={openaiKey}
+                                                onChange={(e) => setOpenaiKey(e.target.value)}
+                                                placeholder="sk-..."
+                                                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-700/50 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm shadow-sm dark:shadow-inner"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pl-1 mb-1.5 flex justify-between">
+                                            <span>Gemini Key</span>
+                                            <span className="text-[10px] text-slate-400">AIzaSy...</span>
+                                        </label>
+                                        <div className="relative group">
+                                            <Lock className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 dark:text-slate-500 group-focus-within:text-emerald-500 dark:group-focus-within:text-emerald-400 transition-colors" />
+                                            <input
+                                                type="password"
+                                                value={geminiKey}
+                                                onChange={(e) => setGeminiKey(e.target.value)}
+                                                placeholder="AIzaSy..."
+                                                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-700/50 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm shadow-sm dark:shadow-inner"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest pl-1 mb-1.5 flex justify-between">
+                                            <span>Groq Key</span>
+                                            <span className="text-[10px] text-slate-400">gsk_...</span>
+                                        </label>
+                                        <div className="relative group">
+                                            <Lock className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 dark:text-slate-500 group-focus-within:text-emerald-500 dark:group-focus-within:text-emerald-400 transition-colors" />
+                                            <input
+                                                type="password"
+                                                value={groqKey}
+                                                onChange={(e) => setGroqKey(e.target.value)}
+                                                placeholder="gsk_..."
+                                                className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-700/50 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm shadow-sm dark:shadow-inner"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={isUpdatingKeys}
+                                        className="bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:hover:bg-emerald-500 text-white font-bold py-3.5 px-6 rounded-xl transition-colors shadow-md shadow-emerald-500/20 text-sm mt-4 flex items-center justify-center gap-2 min-w-[180px]"
+                                    >
+                                        {isUpdatingKeys ? (
+                                            <><Loader2 className="h-4 w-4 animate-spin" /> Saving... </>
+                                        ) : (
+                                            'Save AI Keys'
                                         )}
                                     </button>
                                 </form>

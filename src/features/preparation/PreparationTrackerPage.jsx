@@ -5,7 +5,8 @@ import { usePreparationStore } from './store/usePreparationStore';
 export default function PreparationTrackerPage() {
     const { trackers, loading, fetchTrackers, createTracker, deleteTracker, toggleTopic } = usePreparationStore();
     const [isCreating, setIsCreating] = useState(false);
-    const [newExamType, setNewExamType] = useState('BCS');
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [newExamType, setNewExamType] = useState('');
     const [expandedModules, setExpandedModules] = useState({});
 
     useEffect(() => {
@@ -13,8 +14,12 @@ export default function PreparationTrackerPage() {
     }, []);
 
     const handleCreate = async () => {
+        if (!newExamType.trim()) return;
+        setIsGenerating(true);
         await createTracker(newExamType);
+        setIsGenerating(false);
         setIsCreating(false);
+        setNewExamType('');
     };
 
     const toggleModule = (trackerId, moduleIndex) => {
@@ -56,21 +61,19 @@ export default function PreparationTrackerPage() {
                         <Target size={16} className="text-indigo-500" /> Select Target Exam
                     </h3>
                     <div className="flex gap-4">
-                        <select
+                        <input
+                            type="text"
+                            placeholder="e.g. Google Senior React Dev, PMP Certification, BCS..."
                             value={newExamType}
                             onChange={(e) => setNewExamType(e.target.value)}
-                            className="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-slate-700 dark:text-slate-200 font-medium cursor-pointer"
-                        >
-                            <option value="BCS">BCS (Bangladesh Civil Service)</option>
-                            <option value="Bank Job">Bank Job Exams</option>
-                            <option value="Govt IT Exam">Govt IT Officer Exam</option>
-                            <option value="Custom General">Custom General Prep</option>
-                        </select>
+                            className="flex-1 px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-slate-700 dark:text-slate-200 font-medium"
+                        />
                         <button
                             onClick={handleCreate}
-                            className="px-6 py-3 bg-slate-900 dark:bg-emerald-600 text-white font-bold rounded-xl hover:bg-slate-800 dark:hover:bg-emerald-500 transition-colors"
+                            disabled={isGenerating || !newExamType.trim()}
+                            className="px-6 py-3 bg-slate-900 dark:bg-emerald-600 text-white font-bold rounded-xl hover:bg-slate-800 dark:hover:bg-emerald-500 transition-colors disabled:opacity-50 flex items-center gap-2 whitespace-nowrap min-w-[200px] justify-center"
                         >
-                            Generate Curriculum
+                            {isGenerating ? <><Loader2 className="animate-spin" size={18} /> Building AI Syllabus...</> : 'Generate Curriculum'}
                         </button>
                         <button
                             onClick={() => setIsCreating(false)}
