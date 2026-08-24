@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import { useAuthStore } from '../../features/auth/store/useAuthStore';
 
-import { Sun, Moon, User } from 'lucide-react';
+import { Sun, Moon, User, Menu } from 'lucide-react';
 import { useThemeStore } from '../../store/useThemeStore';
 import ReminderBell from '../../features/reminders/components/ReminderBell';
 import FloatingChatbot from '../../features/chat/components/FloatingChatbot';
@@ -11,6 +11,8 @@ export default function MainLayout({ children, activeView, setActiveView }) {
     const user = useAuthStore((state) => state.user);
     const logout = useAuthStore((state) => state.logout);
     const { isDarkMode, toggleTheme } = useThemeStore();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(false);
 
     const viewTitles = {
         dashboard: 'Dashboard',
@@ -26,17 +28,42 @@ export default function MainLayout({ children, activeView, setActiveView }) {
 
     return (
         <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+            {/* Mobile Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-slate-900/50 z-40 lg:hidden backdrop-blur-sm transition-opacity"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+
             <Sidebar
                 activeView={activeView}
                 setActiveView={setActiveView}
                 user={user}
                 logout={logout}
+                isOpen={isSidebarOpen}
+                setIsOpen={setIsSidebarOpen}
+                isCollapsed={isCollapsed}
             />
             {/* Main Content Area */}
-            <main className="flex-1 ml-64 min-w-0 min-h-screen flex flex-col relative">
-                <header className="h-20 sticky top-0 z-40 px-8 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 transition-colors duration-300">
-                    <div className="flex items-center gap-4">
-                        <h2 className="text-xl font-bold text-slate-800 dark:text-white shrink-0">
+            <main className={`flex-1 ${isCollapsed ? 'lg:ml-20' : 'lg:ml-64'} min-w-0 min-h-screen flex flex-col relative transition-all duration-300 ease-in-out`}>
+                <header className="h-20 sticky top-0 z-30 px-6 sm:px-8 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 transition-colors duration-300">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                        <button
+                            onClick={() => setIsSidebarOpen(true)}
+                            className="lg:hidden p-2 -ml-2 rounded-xl text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+                            aria-label="Toggle Mobile Menu"
+                        >
+                            <Menu size={20} />
+                        </button>
+                        <button
+                            onClick={() => setIsCollapsed(!isCollapsed)}
+                            className="hidden lg:block p-2 -ml-2 rounded-xl text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+                            aria-label="Toggle Desktop Menu"
+                        >
+                            <Menu size={20} />
+                        </button>
+                        <h2 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-white shrink-0">
                             {viewTitles[activeView] || 'Career OS'}
                         </h2>
                         {user?.current_plan && (
