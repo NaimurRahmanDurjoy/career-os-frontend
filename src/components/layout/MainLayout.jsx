@@ -23,7 +23,8 @@ export default function MainLayout({ children, activeView, setActiveView }) {
         'mock-tests': 'AI Mock Tests',
         reminders: 'Reminders',
         billing: 'Upgrade Plan',
-        profile: 'User Profile'
+        profile: 'User Profile',
+        'cv-builder': 'ATS CV Builder'
     };
 
     return (

@@ -11,7 +11,8 @@ import {
     BookOpen,
     BrainCircuit,
     CreditCard,
-    X
+    X,
+    Sparkles
 } from 'lucide-react';
 
 export default function Sidebar({ activeView, setActiveView, user, logout, isOpen, setIsOpen, isCollapsed }) {
@@ -20,6 +21,7 @@ export default function Sidebar({ activeView, setActiveView, user, logout, isOpe
         { id: 'resume', label: 'Resume Analyzer', icon: FileText },
         { id: 'jobs', label: 'Job Tracker', icon: Kanban },
         { id: 'match-checker', label: 'Job Match Checker', icon: Target },
+        { id: 'cv-builder', label: 'ATS CV Builder', icon: Sparkles },
         { id: 'preparation', label: 'Prep Tracker', icon: BookOpen },
         { id: 'mock-tests', label: 'AI Mock Tests', icon: BrainCircuit },
         { id: 'reminders', label: 'Reminders', icon: Bell },

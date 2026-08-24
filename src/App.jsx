@@ -20,6 +20,7 @@ import DashboardPage from './features/dashboard/DashboardPage';
 import MainLayout from './components/layout/MainLayout';
 import AdminApp from './features/admin/AdminApp';
 import BillingDashboard from './features/billing/components/BillingDashboard';
+import CvBuilderApp from './features/cv-builder/CvBuilderApp';
 import { Loader2 } from 'lucide-react';
 import { useThemeStore } from './store/useThemeStore.js';
 
@@ -145,6 +146,10 @@ export default function App() {
 
       {activeView === 'billing' && (
         <BillingDashboard />
+      )}
+
+      {activeView === 'cv-builder' && (
+        <CvBuilderApp />
       )}
     </MainLayout>
   );
