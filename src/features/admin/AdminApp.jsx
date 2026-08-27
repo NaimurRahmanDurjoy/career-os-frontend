@@ -3,7 +3,8 @@ import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 import AdminPlans from './components/AdminPlans';
 import AdminUsers from './components/AdminUsers';
-import { Loader2, LogOut, LayoutDashboard, CreditCard, Users } from 'lucide-react';
+import AdminSupportTickets from './components/AdminSupportTickets';
+import { Loader2, LogOut, LayoutDashboard, CreditCard, Users, MessageSquare } from 'lucide-react';
 
 export default function AdminApp() {
     const [adminUser, setAdminUser] = useState(null);
@@ -11,7 +12,6 @@ export default function AdminApp() {
     const [activeTab, setActiveTab] = useState('dashboard');
 
     useEffect(() => {
-        // Check if we have an admin token stored
         const checkAuth = async () => {
             const token = localStorage.getItem('admin_token');
             if (!token) {
@@ -20,8 +20,6 @@ export default function AdminApp() {
             }
 
             try {
-                // Technically we can hit an endpoint to verify token if we had one.
-                // For now, if we have a token, we parse admin user from localStorage (basic implementation)
                 const storedAdmin = localStorage.getItem('admin_user');
                 if (storedAdmin) {
                     setAdminUser(JSON.parse(storedAdmin));
@@ -78,6 +76,9 @@ export default function AdminApp() {
                         <button onClick={() => setActiveTab('users')} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'users' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`}>
                             <Users className="h-4 w-4" /> Users
                         </button>
+                        <button onClick={() => setActiveTab('support')} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'support' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`}>
+                            <MessageSquare className="h-4 w-4" /> Support
+                        </button>
                     </nav>
                 </div>
 
@@ -97,6 +98,7 @@ export default function AdminApp() {
                 {activeTab === 'dashboard' && <AdminDashboard onLogout={handleLogout} />}
                 {activeTab === 'plans' && <AdminPlans onLogout={handleLogout} />}
                 {activeTab === 'users' && <AdminUsers onLogout={handleLogout} />}
+                {activeTab === 'support' && <AdminSupportTickets onLogout={handleLogout} />}
             </main>
         </div>
     );

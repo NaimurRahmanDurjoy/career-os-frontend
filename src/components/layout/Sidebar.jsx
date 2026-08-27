@@ -12,7 +12,8 @@ import {
     BrainCircuit,
     CreditCard,
     X,
-    Sparkles
+    Sparkles,
+    MessageSquare
 } from 'lucide-react';
 
 export default function Sidebar({ activeView, setActiveView, user, logout, isOpen, setIsOpen, isCollapsed }) {
@@ -25,7 +26,8 @@ export default function Sidebar({ activeView, setActiveView, user, logout, isOpe
         { id: 'preparation', label: 'Prep Tracker', icon: BookOpen },
         { id: 'mock-tests', label: 'AI Mock Tests', icon: BrainCircuit },
         { id: 'reminders', label: 'Reminders', icon: Bell },
-        { id: 'billing', label: 'Billing & Plans', icon: CreditCard }
+        { id: 'billing', label: 'Billing & Plans', icon: CreditCard },
+        { id: 'support', label: 'Help & Support', icon: MessageSquare }
     ];
 
     return (
