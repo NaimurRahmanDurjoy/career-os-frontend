@@ -1,18 +1,18 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
-import { 
-  UploadCloud, FileText, CheckCircle, Loader2, AlertCircle, 
-  Briefcase, GraduationCap, Award, Lightbulb, TrendingUp 
+import {
+  UploadCloud, FileText, CheckCircle, Loader2, AlertCircle,
+  Briefcase, GraduationCap, Award, Lightbulb, TrendingUp
 } from 'lucide-react';
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
 
 export default function ResumeUploader() {
   const [file, setFile] = useState(null);
   const [versionName, setVersionName] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [status, setStatus] = useState('idle'); 
+  const [status, setStatus] = useState('idle');
   const [resumeId, setResumeId] = useState(null);
   const [parsedData, setParsedData] = useState(null);
   const [atsScore, setAtsScore] = useState(null);
@@ -56,7 +56,7 @@ export default function ResumeUploader() {
 
       if (response.data.success) {
         setResumeId(response.data.resume.id);
-        setStatus('processing'); 
+        setStatus('processing');
       }
     } catch (error) {
       setStatus('failed');
@@ -78,7 +78,7 @@ export default function ResumeUploader() {
             setAtsScore(resume.ats_score);
             setAiSuggestions(resume.ai_suggestions || []);
             setStatus('completed');
-            clearInterval(intervalId); 
+            clearInterval(intervalId);
           } else if (resume.status === 'failed') {
             setStatus('failed');
             setErrorMessage(resume.parsed_content?.error_message || 'AI processing failed.');
@@ -87,7 +87,7 @@ export default function ResumeUploader() {
         } catch (error) {
           console.error("Polling error:", error);
         }
-      }, 3000); 
+      }, 3000);
     }
 
     return () => {
@@ -135,11 +135,10 @@ export default function ResumeUploader() {
 
             <div
               {...getRootProps()}
-              className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-300 ${
-                isDragActive
+              className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-300 ${isDragActive
                   ? 'border-blue-500 bg-blue-500/10'
                   : 'border-slate-600 bg-slate-900/50 hover:border-slate-500 hover:bg-slate-900'
-              } ${(status === 'uploading' || status === 'processing') ? 'pointer-events-none opacity-50' : ''}`}
+                } ${(status === 'uploading' || status === 'processing') ? 'pointer-events-none opacity-50' : ''}`}
             >
               <input {...getInputProps()} />
               <UploadCloud className="mx-auto h-12 w-12 text-blue-400 mb-4" />
@@ -264,7 +263,7 @@ export default function ResumeUploader() {
                   <Briefcase className="h-5 w-5 text-blue-400" />
                   <span className="text-sm text-slate-300 uppercase font-bold tracking-wider">Work Experience</span>
                 </div>
-                
+
                 {parsedData.experience && Array.isArray(parsedData.experience) && parsedData.experience.length > 0 ? (
                   <div className="space-y-6">
                     {parsedData.experience.map((exp, idx) => (
@@ -276,7 +275,7 @@ export default function ResumeUploader() {
                         {exp && typeof exp === 'object' && (
                           <>
                             <p className="text-slate-300 text-xs mt-0.5">
-                              {safeString(exp.company)} 
+                              {safeString(exp.company)}
                               {exp.duration && <span className="text-slate-400"> • {safeString(exp.duration)}</span>}
                             </p>
                             {exp.location && <p className="text-slate-500 text-[11px] mt-0.5">{safeString(exp.location)}</p>}
