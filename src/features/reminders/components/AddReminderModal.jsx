@@ -11,11 +11,14 @@ export default function AddReminderModal({ isOpen, onClose }) {
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(10, 0, 0, 0);
 
+    // Adjust for timezone to correctly pre-fill local date-time
+    const tomorrowOffset = new Date(tomorrow.getTime() - tomorrow.getTimezoneOffset() * 60000);
+
     const [formData, setFormData] = useState({
         title: '',
         type: 'follow_up',
         description: '',
-        remind_at: tomorrow.toISOString().slice(0, 16),
+        remind_at: tomorrowOffset.toISOString().slice(0, 16),
         job_application_id: ''
     });
 
@@ -34,8 +37,11 @@ export default function AddReminderModal({ isOpen, onClose }) {
         setSubmitting(true);
         setError(null);
         try {
+            const localToUtcDate = new Date(formData.remind_at);
+
             await addReminder({
                 ...formData,
+                remind_at: localToUtcDate.toISOString(),
                 job_application_id: formData.job_application_id || null
             });
             onClose();
