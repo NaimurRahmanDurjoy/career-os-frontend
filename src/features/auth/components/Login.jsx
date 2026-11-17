@@ -3,10 +3,8 @@ import { useAuthStore } from '../store/useAuthStore';
 import { loginSchema } from '../validations/authValidation';
 import { Mail, Lock, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebook, FaLinkedin } from "react-icons/fa";
 
 export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) {
-  // Select only the exact slice required to prevent unnecessary re-renders
   const login = useAuthStore((state) => state.login);
 
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -15,7 +13,6 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
     return sessionStorage.getItem('auth_error') || '';
   });
 
-  // Clean up session storage safely outside of the initializer to survive React Strict Mode
   React.useEffect(() => {
     if (serverError) {
       sessionStorage.removeItem('auth_error');
@@ -28,14 +25,12 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Clear targeted field error proactively once the user modifies the input
     if (fieldErrors[name]) {
       setFieldErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
   const handleSocialLogin = (provider) => {
-    // Redirects directly to the Laravel Socialite initiation endpoint
     const backendUrl = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
     window.location.href = `${backendUrl}/auth/${provider}/redirect`;
   };
@@ -45,7 +40,6 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
     setFieldErrors({});
     setServerError('');
 
-    // Execute synchronous client-side validation runtime via Zod
     const validationResult = loginSchema.safeParse(formData);
 
     if (!validationResult.success) {
@@ -70,14 +64,15 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background glow effects strictly for Auth */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/10 dark:bg-emerald-500/20 rounded-full blur-[120px] pointer-events-none"></div>
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden font-sans">
+      {/* Background Ambient Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/10 dark:bg-emerald-500/15 rounded-full blur-[140px] pointer-events-none"></div>
 
-      <div className="w-full max-w-md bg-white/80 dark:bg-slate-900/50 backdrop-blur-2xl border border-slate-200 dark:border-slate-700/50 rounded-[2rem] p-10 shadow-2xl shadow-emerald-900/5 dark:shadow-emerald-900/20 space-y-8 relative z-10">
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center space-x-2 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-full px-4 py-1.5 mb-4">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+      {/* Sleek Compact Glassmorphic Card */}
+      <div className="w-full max-w-md bg-white/80 dark:bg-slate-900/50 backdrop-blur-2xl border border-slate-200 dark:border-slate-700/50 rounded-[2rem] p-8 sm:p-10 shadow-2xl shadow-emerald-900/10 relative z-10">
+        <div className="text-center space-y-2 mb-6">
+          <div className="inline-flex items-center justify-center space-x-2 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-full px-4 py-1.5 mb-2 shadow-inner">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
             <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest">Career OS Pro</span>
           </div>
           <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-slate-400 tracking-tight">Welcome Back</h2>
@@ -85,26 +80,27 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
         </div>
 
         {serverError && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl flex items-center gap-3">
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl flex items-center gap-3 mb-4">
             <AlertCircle className="h-5 w-5 flex-shrink-0" />
             <span className="text-xs font-medium">{serverError}</span>
           </div>
         )}
 
-        {/* Traditional Credentials Form */}
+        {/* Credentials Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="relative mt-4">
+          {/* Email Address */}
+          <div className="relative mt-2">
             <input
               type="text"
               name="email"
-              id="email"
+              id="login-email"
               value={formData.email}
               onChange={handleInputChange}
               placeholder=" "
               className={`peer w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-900 border ${fieldErrors.email ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500' : 'border-slate-200 dark:border-slate-700/50 focus:border-emerald-500 focus:ring-emerald-500'} rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-1 transition-all text-sm shadow-sm dark:shadow-inner dark:shadow-black/20`}
             />
             <label
-              htmlFor="email"
+              htmlFor="login-email"
               className={`absolute left-11 px-1.5 bg-white dark:bg-slate-900 transition-all duration-200 pointer-events-none 
               ${fieldErrors.email ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400 peer-focus:text-emerald-500 dark:peer-focus:text-emerald-400'} 
               -top-2.5 text-[10px] font-bold uppercase tracking-widest
@@ -120,18 +116,19 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
             )}
           </div>
 
-          <div className="relative mt-6">
+          {/* Password */}
+          <div className="relative mt-5">
             <input
               type="password"
               name="password"
-              id="password"
+              id="login-password"
               value={formData.password}
               onChange={handleInputChange}
               placeholder=" "
               className={`peer w-full pl-12 pr-4 py-3.5 bg-white dark:bg-slate-900 border ${fieldErrors.password ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500' : 'border-slate-200 dark:border-slate-700/50 focus:border-emerald-500 focus:ring-emerald-500'} rounded-xl text-slate-900 dark:text-white focus:outline-none focus:ring-1 transition-all text-sm shadow-sm dark:shadow-inner dark:shadow-black/20`}
             />
             <label
-              htmlFor="password"
+              htmlFor="login-password"
               className={`absolute left-11 px-1.5 bg-white dark:bg-slate-900 transition-all duration-200 pointer-events-none 
               ${fieldErrors.password ? 'text-red-500 dark:text-red-400' : 'text-slate-500 dark:text-slate-400 peer-focus:text-emerald-500 dark:peer-focus:text-emerald-400'} 
               -top-2.5 text-[10px] font-bold uppercase tracking-widest
@@ -159,25 +156,25 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold py-3.5 px-4 rounded-xl hover:from-emerald-400 hover:to-emerald-500 transition-all duration-300 flex items-center justify-center gap-2 text-sm disabled:opacity-50 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] border border-emerald-400/30"
+            className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3.5 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 text-sm disabled:opacity-50 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] active:scale-[0.99] mt-6"
           >
             {isLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
+              <Loader2 className="h-5 w-5 animate-spin text-slate-950" />
             ) : (
               <>
-                Sign In <ArrowRight className="h-4 w-4" />
+                <span>Sign In</span> <ArrowRight size={16} strokeWidth={2.5} />
               </>
             )}
           </button>
         </form>
 
-        {/* Divider Section */}
-        <div className="relative flex py-2 items-center">
-          <div className="flex-grow border-t border-slate-700/50"></div>
+        {/* Divider */}
+        <div className="relative flex py-4 items-center">
+          <div className="flex-grow border-t border-slate-200 dark:border-slate-700/50"></div>
           <span className="flex-shrink mx-4 text-slate-500 text-[10px] font-bold uppercase tracking-widest">
             Or continue with
           </span>
-          <div className="flex-grow border-t border-slate-700/50"></div>
+          <div className="flex-grow border-t border-slate-200 dark:border-slate-700/50"></div>
         </div>
 
         {/* OAuth Authentication Buttons */}
@@ -221,7 +218,7 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
             Don't have an account?{' '}
             <button
               onClick={onSwitchToRegister}
-              className="text-emerald-600 dark:text-emerald-400 font-bold hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors"
+              className="text-emerald-500 font-bold hover:text-emerald-400 transition-colors ml-1"
             >
               Sign up
             </button>
