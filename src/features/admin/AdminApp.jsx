@@ -4,7 +4,8 @@ import AdminDashboard from './components/AdminDashboard';
 import AdminPlans from './components/AdminPlans';
 import AdminUsers from './components/AdminUsers';
 import AdminSupportTickets from './components/AdminSupportTickets';
-import { Loader2, LogOut, LayoutDashboard, CreditCard, Users, MessageSquare } from 'lucide-react';
+import AdminCirculars from './components/AdminCirculars';
+import { Loader2, LogOut, LayoutDashboard, CreditCard, Users, MessageSquare, Compass } from 'lucide-react';
 
 export default function AdminApp() {
     const [adminUser, setAdminUser] = useState(null);
@@ -79,6 +80,9 @@ export default function AdminApp() {
                         <button onClick={() => setActiveTab('support')} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'support' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`}>
                             <MessageSquare className="h-4 w-4" /> Support
                         </button>
+                        <button onClick={() => setActiveTab('circulars')} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeTab === 'circulars' ? 'bg-slate-800 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`}>
+                            <Compass className="h-4 w-4 text-emerald-400" /> Circulars
+                        </button>
                     </nav>
                 </div>
 
@@ -99,6 +103,7 @@ export default function AdminApp() {
                 {activeTab === 'plans' && <AdminPlans onLogout={handleLogout} />}
                 {activeTab === 'users' && <AdminUsers onLogout={handleLogout} />}
                 {activeTab === 'support' && <AdminSupportTickets onLogout={handleLogout} />}
+                {activeTab === 'circulars' && <AdminCirculars onLogout={handleLogout} />}
             </main>
         </div>
     );

@@ -1,9 +1,8 @@
 import React from 'react';
-import { useAuthStore } from '../../features/auth/store/useAuthStore';
+import { NavLink } from 'react-router-dom';
 import {
     FileText,
     Kanban,
-    LogOut,
     Briefcase,
     LayoutDashboard,
     Bell,
@@ -13,21 +12,24 @@ import {
     CreditCard,
     X,
     Sparkles,
-    MessageSquare
+    MessageSquare,
+    Compass
 } from 'lucide-react';
+import SidebarSetupItem from './SidebarSetupItem';
 
-export default function Sidebar({ activeView, setActiveView, user, logout, isOpen, setIsOpen, isCollapsed }) {
+export default function Sidebar({ isOpen, setIsOpen, isCollapsed }) {
     const navItems = [
-        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-        { id: 'resume', label: 'Resume Analyzer', icon: FileText },
-        { id: 'jobs', label: 'Job Tracker', icon: Kanban },
-        { id: 'match-checker', label: 'Job Match Checker', icon: Target },
-        { id: 'cv-builder', label: 'ATS CV Builder', icon: Sparkles },
-        { id: 'preparation', label: 'Prep Tracker', icon: BookOpen },
-        { id: 'mock-tests', label: 'AI Mock Tests', icon: BrainCircuit },
-        { id: 'reminders', label: 'Reminders', icon: Bell },
-        { id: 'billing', label: 'Billing & Plans', icon: CreditCard },
-        { id: 'support', label: 'Help & Support', icon: MessageSquare }
+        { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        { path: '/circulars', label: 'Job Circulars', icon: Compass },
+        { path: '/resumes', label: 'Resume Analyzer', icon: FileText },
+        { path: '/jobs', label: 'Job Tracker', icon: Kanban },
+        { path: '/match-checker', label: 'Job Match Checker', icon: Target },
+        { path: '/cv-builder', label: 'ATS CV Builder', icon: Sparkles },
+        { path: '/preparation', label: 'Prep Tracker', icon: BookOpen },
+        { path: '/mock-tests', label: 'AI Mock Tests', icon: BrainCircuit },
+        { path: '/reminders', label: 'Reminders', icon: Bell },
+        { path: '/billing', label: 'Billing & Plans', icon: CreditCard },
+        { path: '/support', label: 'Help & Support', icon: MessageSquare }
     ];
 
     return (
@@ -58,53 +60,36 @@ export default function Sidebar({ activeView, setActiveView, user, logout, isOpe
             </div>
 
             {/* Navigation Menus */}
-            <nav className="flex-1 px-4 py-8 space-y-2">
+            <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
                 {navItems.map((item) => {
                     const Icon = item.icon;
-                    const isActive = activeView === item.id;
                     return (
-                        <button
-                            key={item.id}
+                        <NavLink
+                            key={item.path}
+                            to={item.path}
                             title={isCollapsed ? item.label : undefined}
                             onClick={() => {
-                                setActiveView(item.id);
                                 if (setIsOpen) setIsOpen(false);
                             }}
-                            className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'gap-3 px-4'} py-3 rounded-lg transition-colors duration-200 font-semibold text-sm ${isActive
+                            className={({ isActive }) => `w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'gap-3 px-4'} py-2.5 rounded-xl transition-colors duration-200 font-semibold text-sm ${isActive
                                 ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
                                 : 'hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                                 }`}
                         >
-                            <Icon size={isCollapsed ? 22 : 18} className={`${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'opacity-70'} ${isCollapsed ? 'shrink-0' : ''}`} />
-                            {!isCollapsed && <span className="truncate">{item.label}</span>}
-                        </button>
-                    )
+                            {({ isActive }) => (
+                                <>
+                                    <Icon size={isCollapsed ? 22 : 18} className={`${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'opacity-70'} ${isCollapsed ? 'shrink-0' : ''}`} />
+                                    {!isCollapsed && <span className="truncate">{item.label}</span>}
+                                </>
+                            )}
+                        </NavLink>
+                    );
                 })}
             </nav>
 
-            {/* User Account / Footer */}
-            <div className={`p-3 ${isCollapsed ? 'mx-2 flex justify-center' : 'mx-4'} mb-4 mt-auto rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 relative group overflow-hidden transition-colors hover:border-slate-300 dark:hover:border-slate-700`}>
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/5 to-indigo-500/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className={`relative flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'}`}>
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-emerald-500 to-indigo-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-inner" title={isCollapsed ? (user?.name || 'Account') : undefined}>
-                        {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                    </div>
-                    {!isCollapsed && (
-                        <>
-                            <div className="flex-1 overflow-hidden">
-                                <p className="text-sm font-bold text-slate-800 dark:text-slate-200 truncate leading-tight">{user?.name || 'Account'}</p>
-                                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate mt-0.5">{user?.email}</p>
-                            </div>
-                            <button
-                                onClick={logout}
-                                title="Sign Out"
-                                className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors shrink-0"
-                            >
-                                <LogOut size={16} />
-                            </button>
-                        </>
-                    )}
-                </div>
+            {/* Sleek Setup Guide Item (Triggers Clean Centered Modal) */}
+            <div className="pb-3">
+                <SidebarSetupItem isCollapsed={isCollapsed} />
             </div>
         </aside>
     );
