@@ -65,8 +65,12 @@ export const authApi = {
   /**
    * Updates the current authenticated user's profile information
    */
-  async updateProfile(name, email) {
-    const response = await apiClient.put('/user', { name, email });
+  async updateProfile(name, email, avatar = undefined) {
+    const payload = { name, email };
+    if (avatar !== undefined) {
+      payload.avatar = avatar;
+    }
+    const response = await apiClient.put('/user', payload);
     return response.data;
   },
 
@@ -85,6 +89,22 @@ export const authApi = {
       gemini_key: geminiKey,
       groq_key: groqKey
     });
+    return response.data;
+  },
+
+  /**
+   * Updates public portfolio visibility and customized portfolio fields
+   */
+  async updatePortfolio(portfolioData) {
+    const response = await apiClient.put('/user/portfolio', portfolioData);
+    return response.data;
+  },
+
+  /**
+   * Fetches public portfolio by username (unauthenticated)
+   */
+  async getPublicPortfolio(username) {
+    const response = await apiClient.get(`/portfolio/${username}`);
     return response.data;
   },
 

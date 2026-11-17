@@ -86,9 +86,9 @@ export const useAuthStore = create((set) => ({
   /**
    * Dispatches profile modifications to update personal user information
    */
-  updateProfile: async (name, email) => {
+  updateProfile: async (name, email, avatar = undefined) => {
     try {
-      const response = await authApi.updateProfile(name, email);
+      const response = await authApi.updateProfile(name, email, avatar);
       set((state) => ({ user: { ...state.user, ...response.user } }));
       return { success: true };
     } catch (error) {
@@ -113,6 +113,16 @@ export const useAuthStore = create((set) => ({
       const response = await authApi.updateApiKeys(openaiKey, geminiKey, groqKey);
       set((state) => ({ user: { ...state.user, ...response.user } }));
       return { success: true };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  updatePortfolio: async (portfolioData) => {
+    try {
+      const response = await authApi.updatePortfolio(portfolioData);
+      set((state) => ({ user: { ...state.user, ...response.data } }));
+      return { success: true, data: response.data };
     } catch (error) {
       throw error;
     }
