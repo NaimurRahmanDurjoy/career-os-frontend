@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Target, Zap, AlertCircle, RefreshCw, FileText, Copy, CheckCircle2 } from 'lucide-react';
 import { useMatchCheckerStore } from './store/useMatchCheckerStore';
 import { useResumeStore } from '../resumes/store/useResumeStore';
@@ -6,6 +7,7 @@ import { useAuthStore } from '../auth/store/useAuthStore';
 import PaywallModal from '../../components/common/PaywallModal';
 
 export default function MatchCheckerPage() {
+    const location = useLocation();
     const { evaluationCache, coverLetterCache, isEvaluating, isGeneratingLetter, error, evaluateMatch, generateCoverLetter, clearEvaluation } = useMatchCheckerStore();
     const { resumes, fetchResumes } = useResumeStore();
     const user = useAuthStore((state) => state.user);
@@ -14,7 +16,15 @@ export default function MatchCheckerPage() {
     const [isPaywallOpen, setIsPaywallOpen] = useState(false);
 
     const [selectedResumeId, setSelectedResumeId] = useState('');
-    const [jobDescription, setJobDescription] = useState('');
+    const [jobDescription, setJobDescription] = useState(
+        location.state?.prefillJob?.description || ''
+    );
+
+    useEffect(() => {
+        if (location.state?.prefillJob?.description) {
+            setJobDescription(location.state.prefillJob.description);
+        }
+    }, [location.state]);
 
     useEffect(() => {
         fetchResumes();
