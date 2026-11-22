@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { 
-  Globe, ExternalLink, Download, 
-  Briefcase, GraduationCap, Award, Sparkles, CheckCircle2, 
+import {
+  Globe, ExternalLink, Download,
+  Briefcase, GraduationCap, Award, Sparkles, CheckCircle2,
   MapPin, Mail, ArrowUpRight, Copy, Check, Share2, AlertCircle
 } from 'lucide-react';
 import { authApi } from '../auth/services/authApi';
@@ -67,6 +67,7 @@ export default function PublicPortfolioPage() {
   }, [username]);
 
   const handleCopyLink = () => {
+
     navigator.clipboard.writeText(window.location.href);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ExtensionDownloadModal from './common/ExtensionDownloadModal';
 import {
   Briefcase,
   Sparkles,
@@ -20,6 +21,7 @@ import { useAuthStore } from '../features/auth/store/useAuthStore';
 export default function LandingPage() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
+  const [isOpenExtensionModal, setIsOpenExtensionModal] = useState(false);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500 selection:text-white">
@@ -249,8 +251,8 @@ export default function LandingPage() {
             </div>
 
             <button
-              onClick={() => navigate('/register')}
-              className="px-6 py-3.5 bg-white hover:bg-slate-200 text-slate-950 font-black rounded-xl text-sm transition-all flex items-center gap-2 shadow-lg"
+              onClick={() => setIsOpenExtensionModal(true)}
+              className="px-6 py-3.5 bg-white hover:bg-slate-200 text-slate-950 font-black rounded-xl text-sm transition-all flex items-center gap-2 shadow-lg active:scale-95"
             >
               <Globe size={18} className="text-emerald-600" /> Get Extension Free
             </button>
@@ -306,6 +308,12 @@ export default function LandingPage() {
           </p>
         </div>
       </footer>
+
+      {/* Extension Modal */}
+      <ExtensionDownloadModal
+        isOpen={isOpenExtensionModal}
+        onClose={() => setIsOpenExtensionModal(false)}
+      />
     </div>
   );
 }

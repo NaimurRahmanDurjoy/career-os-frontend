@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useResumeStore } from '../../features/resumes/store/useResumeStore';
 import { useDashboardStore } from '../../features/dashboard/store/useDashboardStore';
+import ExtensionDownloadModal from '../common/ExtensionDownloadModal';
 
 export default function SidebarSetupItem({ isCollapsed }) {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function SidebarSetupItem({ isCollapsed }) {
   const stats = useDashboardStore((state) => state.stats);
 
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenExtensionModal, setIsOpenExtensionModal] = useState(false);
   const [isDismissed, setIsDismissed] = useState(() => {
     return localStorage.getItem('hide_sidebar_setup_item') === 'true';
   });
@@ -62,7 +64,10 @@ export default function SidebarSetupItem({ isCollapsed }) {
       title: 'Install 1-Click Job Clipper Extension',
       desc: 'Clip jobs natively from LinkedIn, Bdjobs, and Facebook.',
       completed: false,
-      action: () => window.open('https://github.com', '_blank'),
+      action: () => {
+        setIsOpenModal(false);
+        setIsOpenExtensionModal(true);
+      },
       btnText: 'Get Extension',
       icon: Globe,
     }
@@ -231,6 +236,12 @@ export default function SidebarSetupItem({ isCollapsed }) {
         </div>,
         document.body
       )}
+
+      {/* Extension Download & Setup Guide Modal */}
+      <ExtensionDownloadModal
+        isOpen={isOpenExtensionModal}
+        onClose={() => setIsOpenExtensionModal(false)}
+      />
     </>
   );
 }
