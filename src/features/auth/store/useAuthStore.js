@@ -60,19 +60,38 @@ export const useAuthStore = create((set) => ({
    */
   register: async (name, email, password, passwordConfirmation) => {
     try {
-      const { user, access_token } = await authApi.register(
+      const response = await authApi.register(
         name,
         email,
         password,
         passwordConfirmation
       );
 
+      // Strict Verification: Registration does NOT grant token directly
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  verifyOtp: async (email, otp) => {
+    try {
+      const { user, access_token } = await authApi.verifyOtp(email, otp);
+
       localStorage.setItem('token', access_token);
       document.cookie = `careeros_token=${access_token}; path=/; max-age=2592000; SameSite=Lax`;
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
       set({ user, token: access_token });
-      return { success: true };
+      return { success: true, user };
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  resendOtp: async (email) => {
+    try {
+      return await authApi.resendOtp(email);
     } catch (error) {
       throw error;
     }

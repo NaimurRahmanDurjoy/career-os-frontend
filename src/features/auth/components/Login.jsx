@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { loginSchema } from '../validations/authValidation';
 import { Mail, Lock, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
 import { FcGoogle } from "react-icons/fc";
 
 export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) {
+  const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
 
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -55,6 +57,16 @@ export default function Login({ onSwitchToRegister, onSwitchToForgotPassword }) 
     try {
       await login(formData.email, formData.password);
     } catch (error) {
+      if (error.response?.data?.requires_verification) {
+        navigate('/verify-email', {
+          state: {
+            email: error.response.data.email || formData.email,
+            message: error.response.data.message
+          }
+        });
+        return;
+      }
+
       setServerError(
         error.response?.data?.message || 'Authentication failed. Please check your credentials.'
       );

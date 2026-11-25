@@ -14,6 +14,7 @@ import Register from './features/auth/components/Register';
 import OAuthCallback from './features/auth/components/OAuthCallback';
 import ForgotPassword from './features/auth/components/ForgotPassword';
 import ResetPassword from './features/auth/components/ResetPassword';
+import VerifyEmail from './features/auth/components/VerifyEmail';
 
 // Lazy Loaded Application Features (Code Splitting to shrink initial bundle)
 const DashboardPage = lazy(() => import('./features/dashboard/DashboardPage'));
@@ -206,6 +207,16 @@ export default function App() {
         <Route
           path="/reset-password"
           element={<ResetPassword onSwitchToLogin={() => window.location.href = '/login'} />}
+        />
+        <Route
+          path="/verify-email"
+          element={
+            user ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <VerifyEmail />
+            )
+          }
         />
         <Route
           path="/oauth/callback"

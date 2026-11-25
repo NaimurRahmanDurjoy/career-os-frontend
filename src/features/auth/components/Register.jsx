@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { registerSchema } from '../validations/authValidation';
 import { Loader2, User, Mail, Lock, AlertCircle, ArrowRight } from 'lucide-react';
 import { FcGoogle } from "react-icons/fc";
 
 export default function Register({ onSwitchToLogin }) {
+    const navigate = useNavigate();
     const register = useAuthStore((state) => state.register);
 
     const [formData, setFormData] = useState({
@@ -51,7 +53,15 @@ export default function Register({ onSwitchToLogin }) {
         setIsSubmitting(true);
 
         try {
-            await register(formData.name, formData.email, formData.password, formData.passwordConfirmation);
+            const res = await register(formData.name, formData.email, formData.password, formData.passwordConfirmation);
+            if (res.requires_verification) {
+                navigate('/verify-email', {
+                    state: {
+                        email: formData.email,
+                        message: res.message
+                    }
+                });
+            }
         } catch (err) {
             if (err.response?.status === 422) {
                 const laravelErrors = err.response?.data?.errors;

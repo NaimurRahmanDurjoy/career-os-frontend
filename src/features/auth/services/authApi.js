@@ -34,6 +34,22 @@ export const authApi = {
   },
 
   /**
+   * Verifies 6-digit OTP sent to user email
+   */
+  async verifyOtp(email, otp) {
+    const response = await apiClient.post('/email/verify-otp', { email, otp });
+    return response.data;
+  },
+
+  /**
+   * Resends 6-digit OTP to user email
+   */
+  async resendOtp(email) {
+    const response = await apiClient.post('/email/resend-otp', { email });
+    return response.data;
+  },
+
+  /**
    * Revokes the current active authentication token on the backend server
    * @returns {Promise<Object>} Success message acknowledgement
    */
