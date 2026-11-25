@@ -22,6 +22,7 @@ export const useAuthStore = create((set) => ({
 
     try {
       // Synchronize the apiClient instance explicitly with the active token state
+      document.cookie = `careeros_token=${token}; path=/; max-age=2592000; SameSite=Lax`;
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       const userData = await authApi.getCurrentUser();
       set({ user: userData, token, loading: false });
@@ -30,6 +31,7 @@ export const useAuthStore = create((set) => ({
 
       // Clean up corrupt or expired storage profiles immediately
       localStorage.removeItem('token');
+      document.cookie = 'careeros_token=; path=/; max-age=0; SameSite=Lax';
       delete apiClient.defaults.headers.common['Authorization'];
       set({ user: null, token: null, loading: false });
     }
@@ -43,6 +45,7 @@ export const useAuthStore = create((set) => ({
       const { user, access_token } = await authApi.login(email, password);
 
       localStorage.setItem('token', access_token);
+      document.cookie = `careeros_token=${access_token}; path=/; max-age=2592000; SameSite=Lax`;
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
       set({ user, token: access_token });
@@ -65,6 +68,7 @@ export const useAuthStore = create((set) => ({
       );
 
       localStorage.setItem('token', access_token);
+      document.cookie = `careeros_token=${access_token}; path=/; max-age=2592000; SameSite=Lax`;
       apiClient.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
       set({ user, token: access_token });
@@ -79,6 +83,7 @@ export const useAuthStore = create((set) => ({
    */
   loginWithSocialData: (userData, accessToken) => {
     localStorage.setItem('token', accessToken);
+    document.cookie = `careeros_token=${accessToken}; path=/; max-age=2592000; SameSite=Lax`;
     apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     set({ user: userData, token: accessToken, loading: false });
   },
@@ -138,6 +143,7 @@ export const useAuthStore = create((set) => ({
       console.error('Remote logout handshake failed on server instance:', error);
     } finally {
       localStorage.removeItem('token');
+      document.cookie = 'careeros_token=; path=/; max-age=0; SameSite=Lax';
       delete apiClient.defaults.headers.common['Authorization'];
       set({ user: null, token: null, loading: false });
     }
